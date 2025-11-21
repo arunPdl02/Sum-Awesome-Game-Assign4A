@@ -7,12 +7,12 @@ public class Game {
     public GameBoard board;
     public Stats stats;
 
-    public Game(GameBoard board){
+    public Game(GameBoard board) {
         this.board = board;
         gameId = 0;
     }
 
-    public void startNewGame(){
+    public void startNewGame() {
         gameId++;
     }
 }

@@ -10,7 +10,7 @@ public class RingsManager {
     private final List<Ring> listOfRings = Arrays.asList(Ring.values());
     private List<Ring> activeRings = new ArrayList<>(); // is set by observing stats class
 
-    public List<Ring> getActiveRings(){
+    public List<Ring> getActiveRings() {
         return activeRings;
     }
 }

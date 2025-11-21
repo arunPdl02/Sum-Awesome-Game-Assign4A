@@ -12,20 +12,20 @@ public class Cell {
         this.value = value;
     }
 
-    public void setValue(int value){
+    public void setValue(int value) {
         this.value = value;
     }
 
-    public boolean isCellLocked(){
+    public boolean isCellLocked() {
         return cellLocked;
     }
 
-    public void unlockCell(){
+    public void unlockCell() {
         cellLocked = false;
     }
 
-    public String toString(){
-        if(cellLocked){
+    public String toString() {
+        if (cellLocked) {
             return "  " + value + "  ";
         }
         return " _" + value + "_ ";

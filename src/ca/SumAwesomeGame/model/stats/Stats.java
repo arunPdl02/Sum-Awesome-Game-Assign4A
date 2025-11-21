@@ -12,7 +12,7 @@ public class Stats {
     private int totalNumberOfFills;
     private List<Weapon> weaponsUsed = new ArrayList<>();
 
-    public void addUsedWeapon(Weapon currentWeapon){
+    public void addUsedWeapon(Weapon currentWeapon) {
         weaponsUsed.add(currentWeapon);
     }
 

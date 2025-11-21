@@ -27,8 +27,14 @@ public class MainUI implements Runnable {
         while (!input.equals("quit")) {
             printEnemies();
             printBoard();
+            printPlayerStat();
             input = InputHandler.getInput();
         }
+    }
+
+    private void printPlayerStat() {
+        System.out.printf("%15s", " [" + game.getPlayerHealth() + "] ");
+        System.out.printf("%20s \n", "Fill Strength: " + game.getPlayerFill());
     }
 
     private void printEnemies() {

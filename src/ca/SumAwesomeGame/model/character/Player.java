@@ -4,9 +4,9 @@ import ca.SumAwesomeGame.model.equipment.rings.Ring;
 import ca.SumAwesomeGame.model.equipment.rings.RingsManager;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.equipment.weapons.WeaponsManager;
+import ca.SumAwesomeGame.model.fill.Fill;
 import ca.SumAwesomeGame.model.game.Attack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
@@ -17,15 +17,23 @@ public class Player {
     private Ring[] equippedRings = new Ring[3];
 
     private final Attack attack = new Attack();
-    private int health;
+    private int health = 1000;
+    private Fill fill = new Fill();
 
     public Player() {
-        health = 1000;
+    }
+
+    public int getHealth() {
+        return health;
     }
 
     public void Attack() {
         Weapon currentWeapon = weapons.equipWeapon();
         List<Ring> currentRings = myRings.getActiveRings();
         attack.initiateAttack(currentWeapon, currentRings);
+    }
+
+    public int getFillStrength(){
+        return fill.getStrength();
     }
 }

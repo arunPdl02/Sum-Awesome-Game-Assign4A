@@ -20,4 +20,8 @@ public class Enemy {
         this.health = health;
     }
 
+    public void reduceHealth(int damage){
+        health -= damage;
+    }
+
 }

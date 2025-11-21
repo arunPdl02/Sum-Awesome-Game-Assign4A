@@ -1,6 +1,7 @@
 package ca.SumAwesomeGame.model.game;
 
 import ca.SumAwesomeGame.model.character.Enemy;
+import ca.SumAwesomeGame.model.character.Player;
 import ca.SumAwesomeGame.model.stats.Stats;
 
 import java.util.ArrayList;
@@ -12,11 +13,13 @@ public class Game {
     public Stats stats;
     private final int NUMBER_OF_ENEMIES = 3;
     public List<Enemy> listOfEnemies = new ArrayList<>();
+    public Player player;
 
     public Game(GameBoard board) {
         this.board = board;
         gameId = 0;
         createNewEnemies();
+        player = new Player();
     }
 
     private void createNewEnemies() {
@@ -39,4 +42,11 @@ public class Game {
         createNewEnemies();
     }
 
+    public int getPlayerHealth() {
+        return player.getHealth();
+    }
+
+    public int getPlayerFill() {
+        return player.getFillStrength();
+    }
 }

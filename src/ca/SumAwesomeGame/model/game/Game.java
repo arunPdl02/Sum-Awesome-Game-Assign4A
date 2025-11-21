@@ -15,23 +15,24 @@ public class Game {
     public List<Enemy> listOfEnemies = new ArrayList<>();
     public Player player;
 
-    public Game(GameBoard board) {
-        this.board = board;
+    public final int ROW_SIZE = 3;
+    public final int COL_SIZE = 3;
+
+    public Game() {
         gameId = 0;
-        createNewEnemies();
         player = new Player();
     }
 
     private void createNewEnemies() {
         listOfEnemies.clear();
-        for(int i = 0; i < NUMBER_OF_ENEMIES; i++){
+        for (int i = 0; i < NUMBER_OF_ENEMIES; i++) {
             listOfEnemies.add(new Enemy(i));
         }
     }
 
-    public List<Integer> getEnemyHealth(){
+    public List<Integer> getEnemyHealth() {
         List<Integer> enemyHealth = new ArrayList<>();
-        for(Enemy enemy: listOfEnemies){
+        for (Enemy enemy : listOfEnemies) {
             enemyHealth.add(enemy.getHealth());
         }
         return enemyHealth;
@@ -40,6 +41,7 @@ public class Game {
     public void startNewGame() {
         gameId++;
         createNewEnemies();
+        board = new GameBoard(ROW_SIZE, COL_SIZE);
     }
 
     public int getPlayerHealth() {
@@ -49,4 +51,41 @@ public class Game {
     public int getPlayerFill() {
         return player.getFillStrength();
     }
+
+    public void play(int sum) {
+        Cell validCell = isSumValid(sum);
+        validCell.unlockCell();
+        player.increaseFillStrength(sum);
+    }
+
+    public Cell isSumValid(int sum) {
+        int middleValue = board.getCell(1, 1).getValue();
+        Cell currentCell;
+        int summedValue;
+        for (int i = 0; i < ROW_SIZE; i++) {
+            for (int j = 0; j < COL_SIZE; j++) {
+                if (!(i == 1 && j == 1)) {
+                    currentCell = board.getCell(i,j);
+                    summedValue = currentCell.getValue() + middleValue;
+                    System.out.println("summed :" + summedValue + "  input: " + sum);
+                    if (summedValue == sum && currentCell.isCellLocked()) {
+                        return board.getCell(i, j);
+                    }
+                }
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
+    public String getBoard() {
+        StringBuilder boardString = new StringBuilder();
+        for (int i = 0; i < ROW_SIZE; i++) {
+            for (int j = 0; j < COL_SIZE; j++) {
+                boardString.append(String.format(("%-10s"), board.getCell(i, j)));
+            }
+            boardString.append("\n");
+        }
+        return boardString.toString();
+    }
+
 }

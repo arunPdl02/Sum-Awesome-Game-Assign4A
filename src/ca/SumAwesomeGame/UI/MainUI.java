@@ -1,5 +1,6 @@
 package ca.SumAwesomeGame.UI;
 
+import ca.SumAwesomeGame.UI.commands.Cheat;
 import ca.SumAwesomeGame.model.game.Game;
 import ca.SumAwesomeGame.model.game.GameBoard;
 
@@ -12,12 +13,9 @@ public class MainUI implements Runnable {
     private GameBoard board;
     private int[] enemyHealth;
 
-    private final int ROW_SIZE = 3;
-    private final int COL_SIZE = 3;
-
     public MainUI() {
         text = new TextUI();
-
+        game = new Game();
     }
 
     @Override
@@ -29,7 +27,29 @@ public class MainUI implements Runnable {
             printBoard();
             printPlayerStat();
             input = InputHandler.getInput();
+            String[] inputArrayWord = input.split(" ", 2);
+
+            try{
+                switch (inputArrayWord[0]){
+                    case "gear" -> showGear();
+                    case "stats" -> showStats();
+                    case "new" -> startGame();
+                    case "cheat" -> Cheat.handleCheat(input);
+                    case "quit" -> System.exit(0);
+                    default -> game.play(Integer.parseInt(input));
+                }
+            } catch (NumberFormatException e){
+                System.out.println("Enter a valid input.");
+            } catch (IllegalArgumentException e){
+                System.out.println("Invalid sum, no cells unlocked!");
+            }
+
         }
+    }
+
+    private void showGear() {
+    }
+    private void showStats(){
     }
 
     private void printPlayerStat() {
@@ -46,17 +66,10 @@ public class MainUI implements Runnable {
     }
 
     public void startGame() {
-        board = new GameBoard(ROW_SIZE, COL_SIZE);
-        game = new Game(board);
         game.startNewGame();
     }
 
     public void printBoard() {
-        for (int i = 0; i < ROW_SIZE; i++) {
-            for (int j = 0; j < COL_SIZE; j++) {
-                System.out.printf("%-10s", board.getCell(i, j));
-            }
-            System.out.print("\n");
-        }
+        System.out.print(game.getBoard());
     }
 }

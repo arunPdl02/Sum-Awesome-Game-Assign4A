@@ -1,14 +1,14 @@
 package ca.SumAwesomeGame.model.game;
 
 public class Cell {
-    private long value;
+    private int value;
     private boolean cellLocked = true;
 
-    public long getValue() {
+    public int getValue() {
         return value;
     }
 
-    public Cell(long value) {
+    public Cell(int value) {
         this.value = value;
     }
 

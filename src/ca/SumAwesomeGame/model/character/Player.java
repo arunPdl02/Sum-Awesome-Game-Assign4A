@@ -4,7 +4,6 @@ import ca.SumAwesomeGame.model.equipment.rings.Ring;
 import ca.SumAwesomeGame.model.equipment.rings.RingsManager;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.equipment.weapons.WeaponsManager;
-import ca.SumAwesomeGame.model.fill.Fill;
 import ca.SumAwesomeGame.model.game.Attack;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public class Player {
 
     private final Attack attack = new Attack();
     private int health = 1000;
-    private Fill fill = new Fill();
+    private int fill = 0;
 
     public Player() {
     }
@@ -34,6 +33,14 @@ public class Player {
     }
 
     public int getFillStrength(){
-        return fill.getStrength();
+        return fill;
+    }
+
+    public void increaseFillStrength(int strength){
+        fill += strength;
+    }
+
+    public void resetFillStrength(){
+        fill = 0;
     }
 }

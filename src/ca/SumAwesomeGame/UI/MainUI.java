@@ -3,6 +3,8 @@ package ca.SumAwesomeGame.UI;
 import ca.SumAwesomeGame.model.game.Game;
 import ca.SumAwesomeGame.model.game.GameBoard;
 
+import java.util.List;
+
 public class MainUI implements Runnable {
 
     private TextUI text;
@@ -23,9 +25,18 @@ public class MainUI implements Runnable {
         String input = "";
         startGame();
         while (!input.equals("quit")) {
+            printEnemies();
             printBoard();
             input = InputHandler.getInput();
         }
+    }
+
+    private void printEnemies() {
+        List<Integer> enemyHealth = game.getEnemyHealth();
+        for (Integer i: enemyHealth){
+            System.out.printf("%-10s", " [" + i + "] ");
+        }
+        System.out.print("\n");
     }
 
     public void startGame() {

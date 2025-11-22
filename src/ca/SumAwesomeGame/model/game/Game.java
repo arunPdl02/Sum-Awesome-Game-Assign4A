@@ -3,6 +3,7 @@ package ca.SumAwesomeGame.model.game;
 import ca.SumAwesomeGame.model.character.Enemy;
 import ca.SumAwesomeGame.model.character.Player;
 import ca.SumAwesomeGame.model.stats.Stats;
+import ca.SumAwesomeGame.model.util.GameMath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class Game {
 
     public final int ROW_SIZE = 3;
     public final int COL_SIZE = 3;
+    public int playerInputCount;
 
     public Game() {
         gameId = 0;
@@ -42,6 +44,7 @@ public class Game {
         gameId++;
         createNewEnemies();
         board = new GameBoard(ROW_SIZE, COL_SIZE);
+        playerInputCount = 0;
     }
 
     public int getPlayerHealth() {
@@ -56,20 +59,37 @@ public class Game {
         Cell validCell = isSumValid(sum);
         validCell.unlockCell();
         player.increaseFillStrength(sum);
+        playerInputCount++;
+        if(allOuterCellsUnlocked()){
+            player.attack();
+            board = new GameBoard(ROW_SIZE,COL_SIZE);
+            player.resetFillStrength();
+        }
+        if (playerInputCount % GameMath.getRandomValueBetween(3,5) == 0){
+            Enemy randomEnemy = listOfEnemies.get(GameMath.getRandomValueBetween(0,3));
+            randomEnemy.attack();
+        }
+    }
+
+    private boolean allOuterCellsUnlocked() {
+        int count = 0;
+        for (int i = 0; i < ROW_SIZE; i++) {
+            for (int j = 0; j < COL_SIZE; j++) {
+                if(board.cellUnlocked(i,j)){
+                    count++;
+                }
+            }
+        }
+//        return count == 8;
+        return count == 3;
     }
 
     public Cell isSumValid(int sum) {
-        int middleValue = board.getCell(1, 1).getValue();
-        Cell currentCell;
-        int summedValue;
         for (int i = 0; i < ROW_SIZE; i++) {
             for (int j = 0; j < COL_SIZE; j++) {
                 if (!(i == 1 && j == 1)) {
-                    currentCell = board.getCell(i,j);
-                    summedValue = currentCell.getValue() + middleValue;
-                    System.out.println("summed :" + summedValue + "  input: " + sum);
-                    if (summedValue == sum && currentCell.isCellLocked()) {
-                        return board.getCell(i, j);
+                    if (board.checkSumOfTwoCells(1,1,i,j,sum)){
+                        return board.getCell(i,j);
                     }
                 }
             }

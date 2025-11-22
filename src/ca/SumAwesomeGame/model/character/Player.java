@@ -26,10 +26,10 @@ public class Player {
         return health;
     }
 
-    public void Attack() {
-        Weapon currentWeapon = weapons.equipWeapon();
-        List<Ring> currentRings = myRings.getActiveRings();
-        attack.initiateAttack(currentWeapon, currentRings);
+    public void attack() {
+//        Weapon currentWeapon = weapons.equipWeapon();
+//        List<Ring> currentRings = myRings.getActiveRings();
+        attack.initiateAttack();
     }
 
     public int getFillStrength(){

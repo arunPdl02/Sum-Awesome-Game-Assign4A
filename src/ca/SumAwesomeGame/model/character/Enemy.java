@@ -24,4 +24,7 @@ public class Enemy {
         health -= damage;
     }
 
+    public void attack() {
+        System.out.println("Enemy Attacked!");
+    }
 }

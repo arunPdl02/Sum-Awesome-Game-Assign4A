@@ -6,8 +6,6 @@ import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.equipment.weapons.WeaponsManager;
 import ca.SumAwesomeGame.model.game.Attack;
 
-import java.util.List;
-
 public class Player {
     private WeaponsManager weapons;
     private RingsManager myRings;
@@ -42,5 +40,9 @@ public class Player {
 
     public void resetFillStrength(){
         fill = 0;
+    }
+
+    public void reduceHealth(int EnemyAttackStrength) {
+        health -= EnemyAttackStrength;
     }
 }

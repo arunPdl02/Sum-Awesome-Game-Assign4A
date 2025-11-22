@@ -3,9 +3,12 @@ package ca.SumAwesomeGame.model.character;
 public class Enemy {
     private final int location;
     private int health = 50;
+    private final int attackStrength = 50;
+    private Player player;
 
-    public Enemy(int location) {
+    public Enemy(int location, Player player) {
         this.location = location;
+        this.player = player;
     }
 
     public int getLocation() {
@@ -25,6 +28,6 @@ public class Enemy {
     }
 
     public void attack() {
-        System.out.println("Enemy Attacked!");
+        player.reduceHealth(attackStrength);
     }
 }

@@ -28,7 +28,7 @@ public class Game {
     private void createNewEnemies() {
         listOfEnemies.clear();
         for (int i = 0; i < NUMBER_OF_ENEMIES; i++) {
-            listOfEnemies.add(new Enemy(i));
+            listOfEnemies.add(new Enemy(i, player));
         }
     }
 
@@ -81,7 +81,7 @@ public class Game {
             }
         }
 //        return count == 8;
-        return count == 3;
+        return count == 3; //for testing have to implement duplication logic for fill
     }
 
     public Cell isSumValid(int sum) {

@@ -7,6 +7,7 @@ import ca.SumAwesomeGame.model.util.GameMath;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Game {
     public long gameId;
@@ -56,17 +57,18 @@ public class Game {
     }
 
     public void play(int sum) {
-        Cell validCell = isSumValid(sum);
+        Cell validCell = isSumValid(sum)
+                .orElseThrow(IllegalArgumentException::new);
         validCell.unlockCell();
         player.increaseFillStrength(sum);
         playerInputCount++;
-        if(allOuterCellsUnlocked()){
+        if (allOuterCellsUnlocked()) {
             player.attack();
-            board = new GameBoard(ROW_SIZE,COL_SIZE);
+            board = new GameBoard(ROW_SIZE, COL_SIZE);
             player.resetFillStrength();
         }
-        if (playerInputCount % GameMath.getRandomValueBetween(3,5) == 0){
-            Enemy randomEnemy = listOfEnemies.get(GameMath.getRandomValueBetween(0,3));
+        if (playerInputCount % GameMath.getRandomValueBetween(3, 5) == 0) {
+            Enemy randomEnemy = listOfEnemies.get(GameMath.getRandomValueBetween(0, 2));
             randomEnemy.attack();
         }
     }
@@ -75,26 +77,38 @@ public class Game {
         int count = 0;
         for (int i = 0; i < ROW_SIZE; i++) {
             for (int j = 0; j < COL_SIZE; j++) {
-                if(board.cellUnlocked(i,j)){
+                if (board.cellUnlocked(i, j)) {
                     count++;
                 }
             }
         }
-//        return count == 8;
-        return count == 3; //for testing have to implement duplication logic for fill
+        return count == 8;
+//        return count == 3; //for testing have to implement duplication logic for fill
     }
 
-    public Cell isSumValid(int sum) {
+    public Optional<Cell> isSumValid(int sum) {
+        Optional<Cell> lastMatch = Optional.empty();
+
         for (int i = 0; i < ROW_SIZE; i++) {
             for (int j = 0; j < COL_SIZE; j++) {
-                if (!(i == 1 && j == 1)) {
-                    if (board.checkSumOfTwoCells(1,1,i,j,sum)){
-                        return board.getCell(i,j);
-                    }
+
+                if (i == 1 && j == 1) {
+                    continue;
+                }
+
+                if (!board.checkSumOfTwoCells(1, 1, i, j, sum)) {
+                    continue;
+                }
+
+                Cell cell = board.getCell(i, j);
+                lastMatch = Optional.of(cell);
+
+                if (cell.isCellLocked()) {
+                    return lastMatch;
                 }
             }
         }
-        throw new IllegalArgumentException();
+        return lastMatch;
     }
 
     public String getBoard() {

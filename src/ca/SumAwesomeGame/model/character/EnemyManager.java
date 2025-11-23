@@ -1,12 +1,12 @@
 package ca.SumAwesomeGame.model.character;
 
+import ca.SumAwesomeGame.model.game.CellPosition;
 import ca.SumAwesomeGame.model.game.Game;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 import ca.SumAwesomeGame.model.util.GameMath;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class EnemyManager implements GameObserver {
     private Game game;
@@ -26,8 +26,19 @@ public class EnemyManager implements GameObserver {
             Enemy oneRandomEnemy = listOfEnemies.get(GameMath.getRandomValueBetween(0, 2));
             oneRandomEnemy.attack();
         }
-        if (game.startNewGame){
+        if (game.didPlayerJustAttack()){
+            enemyAttacked(game.getLastUnlockedCellPosition());
+        } else if (game.startNewGame) {
             createNewSetOfEnemies();
+        }
+    }
+
+    private void enemyAttacked(CellPosition lastUnlockedCellPosition) {
+        System.out.println("here" + game.getPlayerAttackStrength() + lastUnlockedCellPosition);
+        switch (lastUnlockedCellPosition){
+            case ONE -> listOfEnemies.getFirst().reduceHealth(game.getPlayerAttackStrength());
+            case TWO -> listOfEnemies.get(1).reduceHealth(game.getPlayerAttackStrength());
+            case THREE -> listOfEnemies.get(2).reduceHealth(game.getPlayerAttackStrength());
         }
     }
 
@@ -46,7 +57,9 @@ public class EnemyManager implements GameObserver {
     }
 
     public List<Integer> getEnemyHealth() {
-        return listOfEnemies.stream().map(Enemy::getHealth).toList();
+        return listOfEnemies.stream()
+                .map(Enemy::getHealth)
+                .toList();
     }
 
 }

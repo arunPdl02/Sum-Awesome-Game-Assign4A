@@ -24,7 +24,21 @@ public class Game {
     public final int COL_SIZE = 3;
 
     public boolean startNewGame = false;
+    public int lastFillIncrease = 0;
+    private CellPosition lastUnlockedCellPosition;
+    public boolean readyToAttack = false;
 
+    public CellPosition getLastUnlockedCellPosition() {
+        return lastUnlockedCellPosition;
+    }
+
+    public int getPlayerAttackStrength(){
+        return player.getAttackStrength();
+    }
+
+    public boolean didPlayerJustAttack(){
+        return player.justAttacked;
+    }
 
     private static final List<GameObserver> observers = new ArrayList<>();
 
@@ -33,11 +47,11 @@ public class Game {
         board = new GameBoard(ROW_SIZE, COL_SIZE);
         enemies = new EnemyManager(NUMBER_OF_ENEMIES);
 
-        board.listenToGame(this);
-        player.listenToGame(this);
-        enemies.listenToGame(this);
-        stats.listenToGame(this);
         fill.listenToGame(this);
+        enemies.listenToGame(this);
+        player.listenToGame(this);
+        board.listenToGame(this);
+        stats.listenToGame(this);
     }
 
 
@@ -63,9 +77,19 @@ public class Game {
     public void play(int sum) {
         Cell validCell = isSumValid(sum)
                 .orElseThrow(IllegalArgumentException::new);
-        validCell.unlockCell();
-        fill.setLastFillIncrease(sum);
+
+        lastUnlockedCellPosition = validCell.unlockCell()
+                .orElseThrow(UnsupportedOperationException::new);
+
+        lastFillIncrease = sum;
+
+        readyToAttack = allOuterCellsUnlocked();
+
         update();
+        if(didPlayerJustAttack()){
+            readyToAttack = false;
+            update();
+        }
     }
 
     public boolean allOuterCellsUnlocked() {
@@ -86,18 +110,14 @@ public class Game {
 
         for (int i = 0; i < ROW_SIZE; i++) {
             for (int j = 0; j < COL_SIZE; j++) {
-
                 if (i == 1 && j == 1) {
                     continue;
                 }
-
                 if (!board.checkSumOfTwoCells(1, 1, i, j, sum)) {
                     continue;
                 }
-
                 Cell cell = board.getCell(i, j);
                 lastMatch = Optional.of(cell);
-
                 if (cell.isCellLocked()) {
                     return lastMatch;
                 }

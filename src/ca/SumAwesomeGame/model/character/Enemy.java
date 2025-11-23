@@ -6,7 +6,7 @@ public class Enemy{
     private Game game;
     private final int location;
     private int health = 50;
-    private final int attackStrength = 50;
+    private final int attackStrength = 500;
     private Player player;
 
     public Enemy(int location, Player player) {

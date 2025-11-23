@@ -5,13 +5,13 @@ import ca.SumAwesomeGame.model.observer.GameObserver;
 public class Fill implements GameObserver {
     private Game game;
     private int strength = 0;
-    private int lastFillIncrease = 0;
 
     @Override
     public void update() {
-        increaseFillStrength(lastFillIncrease);
-        if (game.allOuterCellsUnlocked() || game.startNewGame){
+        if (game.startNewGame || game.didPlayerJustAttack() ){
             resetFillStrength();
+        } else {
+            increaseFillStrength(game.lastFillIncrease);
         }
     }
 
@@ -19,10 +19,6 @@ public class Fill implements GameObserver {
     public void listenToGame(Game game) {
         this.game = game;
         game.subscribe(this);
-    }
-
-    public void setLastFillIncrease(int lastFillIncrease) {
-        this.lastFillIncrease = lastFillIncrease;
     }
 
     public int getFillStrength(){
@@ -33,7 +29,7 @@ public class Fill implements GameObserver {
         strength += increase;
     }
 
-    private void resetFillStrength(){
+    public void resetFillStrength(){
         strength = 0;
     }
 }

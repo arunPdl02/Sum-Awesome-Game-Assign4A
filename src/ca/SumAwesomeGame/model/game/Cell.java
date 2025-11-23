@@ -1,15 +1,19 @@
 package ca.SumAwesomeGame.model.game;
 
+import java.util.Optional;
+
 public class Cell {
     private int value;
     private boolean cellLocked = true;
+    private Optional<CellPosition> position = Optional.empty();
 
     public int getValue() {
         return value;
     }
 
-    public Cell(int value) {
+    public Cell(int value, CellPosition position) {
         this.value = value;
+        this.position = Optional.ofNullable(position);
     }
 
     public void setValue(int value) {
@@ -20,8 +24,9 @@ public class Cell {
         return cellLocked;
     }
 
-    public void unlockCell() {
+    public Optional<CellPosition> unlockCell() {
         cellLocked = false;
+        return position;
     }
 
     public String toString() {

@@ -12,11 +12,7 @@ public class GameBoard implements GameObserver {
 
     public GameBoard(int row, int col) {
         board = new Cell[row][col];
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                board[i][j] = new Cell(GameMath.getRandomValueBetween(MIN_VALUE, MAX_VALUE));
-            }
-        }
+        initializeBoard();
     }
 
     public Cell getCell(int row, int col) {
@@ -34,10 +30,17 @@ public class GameBoard implements GameObserver {
         return !board[row][col].isCellLocked();
     }
 
-    private void refreshBoard(){
+    private void initializeBoard(){
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                board[i][j] = new Cell(GameMath.getRandomValueBetween(MIN_VALUE, MAX_VALUE));
+                int randomValue = GameMath.getRandomValueBetween(MIN_VALUE, MAX_VALUE);
+                CellPosition position = null;
+                switch (j){
+                    case 0 -> position = CellPosition.ONE;
+                    case 1 -> position = CellPosition.TWO;
+                    case 2 -> position = CellPosition.THREE;
+                }
+                board[i][j] = new Cell(randomValue, position);
             }
         }
     }
@@ -45,7 +48,7 @@ public class GameBoard implements GameObserver {
     @Override
     public void update() {
         if (game.allOuterCellsUnlocked() || game.startNewGame){
-            refreshBoard();
+            initializeBoard();
         }
     }
 

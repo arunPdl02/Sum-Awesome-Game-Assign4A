@@ -44,6 +44,8 @@ public class MainUI implements Runnable{
                 System.out.println("Enter a valid input.");
             } catch (IllegalArgumentException e){
                 System.out.println("Invalid sum, no cells unlocked!");
+            } catch (UnsupportedOperationException e){
+                System.out.println(e.toString());
             }
 
         }

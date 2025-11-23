@@ -1,15 +1,14 @@
 package ca.SumAwesomeGame.model.game;
 
-import ca.SumAwesomeGame.model.equipment.rings.Ring;
-import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
-
-import java.util.List;
-
 public class Attack {
-    public Attack() {
+    private int attackStrength;
+
+    public Attack(int fill) {
+        System.out.println("Player attacked!");
+        attackStrength = fill;
     }
 
-    public void initiateAttack() {
-        System.out.println("Player attacked!");
+    public int getAttackStrength(){
+        return attackStrength;
     }
 }

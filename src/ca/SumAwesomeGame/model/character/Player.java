@@ -15,11 +15,24 @@ public class Player implements GameObserver {
 
     private Weapon equippedWeapon;
     private Ring[] equippedRings = new Ring[3];
+    public boolean justAttacked = false;
 
-    private final Attack attack = new Attack();
+
+    private int attackStrength;
     private int health = 1000;
 
     public Player() {
+        resetAttack();
+    }
+
+    public int getAttackStrength() {
+        return attackStrength;
+    }
+
+    public void resetAttack(){
+        System.out.println("attack reset");
+        attackStrength = 0;
+        justAttacked = false;
     }
 
     public int getHealth() {
@@ -29,7 +42,9 @@ public class Player implements GameObserver {
     private void attack() {
 //        Weapon currentWeapon = weapons.equipWeapon();
 //        List<Ring> currentRings = myRings.getActiveRings();
-        attack.initiateAttack();
+        Attack attack = new Attack(game.getFill());
+        attackStrength = attack.getAttackStrength();
+        justAttacked = true;
     }
 
     public void reduceHealth(int EnemyAttackStrength) {
@@ -38,11 +53,15 @@ public class Player implements GameObserver {
 
     @Override
     public void update() {
-        if (game.allOuterCellsUnlocked()){
+        if (game.readyToAttack){
             attack();
+            justAttacked = true;
+        } else if (justAttacked) {
+            resetAttack();
         }
-        if (game.startNewGame){
+        if (game.startNewGame) {
             health = 1000;
+            resetAttack();
         }
     }
 

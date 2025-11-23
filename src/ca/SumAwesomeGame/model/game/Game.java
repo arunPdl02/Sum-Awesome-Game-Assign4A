@@ -69,7 +69,8 @@ public class Game {
         lastUnlockedCellPosition = validCell.unlockCell()
                 .orElseThrow(UnsupportedOperationException::new);
 
-        lastFillIncrease = sum;
+        // Store the cell value to add to fill strength
+        lastFillIncrease = validCell.getValue();
         readyToAttack = fillComplete();
 
         update();

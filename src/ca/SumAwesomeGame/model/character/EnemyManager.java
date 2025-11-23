@@ -12,7 +12,8 @@ public class EnemyManager implements GameObserver {
     private Game game;
     private final List<Enemy> listOfEnemies = new ArrayList<>();
     private final int numberOfEnemies;
-    private int updateCount;
+    private int turnsSinceLastAttack = 0;
+    private int attackInterval = GameMath.getRandomValueBetween(3, 5);
 
 
     public EnemyManager(int numberOfEnemies){
@@ -21,15 +22,25 @@ public class EnemyManager implements GameObserver {
 
     @Override
     public void update() {
-        updateCount++;
-        if (updateCount % GameMath.getRandomValueBetween(3, 5) == 0) {
-            Enemy oneRandomEnemy = listOfEnemies.get(GameMath.getRandomValueBetween(0, 2));
-            oneRandomEnemy.attack();
+        turnsSinceLastAttack++;
+        if (turnsSinceLastAttack >= attackInterval) {
+            // Attack with a random enemy
+            if (!listOfEnemies.isEmpty()) {
+                int randomIndex = GameMath.getRandomValueBetween(0, listOfEnemies.size() - 1);
+                Enemy oneRandomEnemy = listOfEnemies.get(randomIndex);
+                oneRandomEnemy.attack();
+            }
+            // Reset counter and pick new random interval for next attack
+            turnsSinceLastAttack = 0;
+            attackInterval = GameMath.getRandomValueBetween(3, 5);
         }
         if (game.didPlayerJustAttack()){
             enemyAttacked(game.getLastUnlockedCellPosition());
         } else if (game.startNewGame) {
             createNewSetOfEnemies();
+            // Reset attack timing for new match
+            turnsSinceLastAttack = 0;
+            attackInterval = GameMath.getRandomValueBetween(3, 5);
         }
     }
 

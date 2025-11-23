@@ -22,7 +22,6 @@ public class Player implements GameObserver {
     private int health = 1000;
 
     public Player() {
-        resetAttack();
     }
 
     public int getAttackStrength() {
@@ -30,7 +29,6 @@ public class Player implements GameObserver {
     }
 
     public void resetAttack(){
-        System.out.println("attack reset");
         attackStrength = 0;
         justAttacked = false;
     }

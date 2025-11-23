@@ -28,19 +28,8 @@ public class Game {
     private CellPosition lastUnlockedCellPosition;
     public boolean readyToAttack = false;
 
-    public CellPosition getLastUnlockedCellPosition() {
-        return lastUnlockedCellPosition;
-    }
-
-    public int getPlayerAttackStrength(){
-        return player.getAttackStrength();
-    }
-
-    public boolean didPlayerJustAttack(){
-        return player.justAttacked;
-    }
-
     private static final List<GameObserver> observers = new ArrayList<>();
+
 
     public Game() {
         gameId = 0;
@@ -53,7 +42,6 @@ public class Game {
         board.listenToGame(this);
         stats.listenToGame(this);
     }
-
 
     public List<Integer> getEnemyHealth() {
         return enemies.getEnemyHealth();
@@ -82,17 +70,17 @@ public class Game {
                 .orElseThrow(UnsupportedOperationException::new);
 
         lastFillIncrease = sum;
-
-        readyToAttack = allOuterCellsUnlocked();
+        readyToAttack = fillComplete();
 
         update();
+
         if(didPlayerJustAttack()){
             readyToAttack = false;
             update();
         }
     }
 
-    public boolean allOuterCellsUnlocked() {
+    public boolean fillComplete() {
         int count = 0;
         for (int i = 0; i < ROW_SIZE; i++) {
             for (int j = 0; j < COL_SIZE; j++) {
@@ -102,7 +90,7 @@ public class Game {
             }
         }
         return count == 8;
-//        return count == 3; //for testing have to implement duplication logic for fill
+//        return count == 3; //for testing
     }
 
     public Optional<Cell> isSumValid(int sum) {
@@ -126,7 +114,6 @@ public class Game {
         return lastMatch;
     }
 
-
     public void update(){
         for (GameObserver e : observers) {
             e.update();
@@ -146,6 +133,18 @@ public class Game {
             boardString.append("\n");
         }
         return boardString.toString();
+    }
+
+    public CellPosition getLastUnlockedCellPosition() {
+        return lastUnlockedCellPosition;
+    }
+
+    public int getPlayerAttackStrength(){
+        return player.getAttackStrength();
+    }
+
+    public boolean didPlayerJustAttack(){
+        return player.justAttacked;
     }
 
 }

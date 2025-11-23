@@ -5,8 +5,11 @@ import ca.SumAwesomeGame.model.equipment.rings.RingsManager;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.equipment.weapons.WeaponsManager;
 import ca.SumAwesomeGame.model.game.Attack;
+import ca.SumAwesomeGame.model.game.Game;
+import ca.SumAwesomeGame.model.observer.GameObserver;
 
-public class Player {
+public class Player implements GameObserver {
+    private Game game;
     private WeaponsManager weapons;
     private RingsManager myRings;
 
@@ -15,7 +18,6 @@ public class Player {
 
     private final Attack attack = new Attack();
     private int health = 1000;
-    private int fill = 0;
 
     public Player() {
     }
@@ -30,19 +32,20 @@ public class Player {
         attack.initiateAttack();
     }
 
-    public int getFillStrength(){
-        return fill;
-    }
-
-    public void increaseFillStrength(int strength){
-        fill += strength;
-    }
-
-    public void resetFillStrength(){
-        fill = 0;
-    }
-
     public void reduceHealth(int EnemyAttackStrength) {
         health -= EnemyAttackStrength;
+    }
+
+    @Override
+    public void update() {
+        if (game.allOuterCellsUnlocked()){
+            attack();
+        }
+    }
+
+    @Override
+    public void listenToGame(Game game) {
+        this.game = game;
+        game.subscribe(this);
     }
 }

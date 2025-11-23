@@ -1,6 +1,9 @@
 package ca.SumAwesomeGame.model.character;
 
-public class Enemy {
+import ca.SumAwesomeGame.model.game.Game;
+
+public class Enemy{
+    private Game game;
     private final int location;
     private int health = 50;
     private final int attackStrength = 50;
@@ -30,4 +33,5 @@ public class Enemy {
     public void attack() {
         player.reduceHealth(attackStrength);
     }
+
 }

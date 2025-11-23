@@ -6,16 +6,18 @@ import ca.SumAwesomeGame.model.game.GameBoard;
 
 import java.util.List;
 
-public class MainUI implements Runnable {
+public class MainUI implements Runnable{
 
-    private TextUI text;
+    private TextUI text = new TextUI();
+    private StatsUI statsUI = new StatsUI();
     private Game game;
     private GameBoard board;
     private int[] enemyHealth;
 
     public MainUI() {
-        text = new TextUI();
         game = new Game();
+
+        statsUI.listenToGame(game);
     }
 
     @Override
@@ -54,7 +56,7 @@ public class MainUI implements Runnable {
 
     private void printPlayerStat() {
         System.out.printf("%15s", " [" + game.getPlayerHealth() + "] ");
-        System.out.printf("%20s \n", "Fill Strength: " + game.getPlayerFill());
+        System.out.printf("%20s \n", "Fill Strength: " + game.getFill());
     }
 
     private void printEnemies() {

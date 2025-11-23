@@ -1,9 +1,11 @@
 package ca.SumAwesomeGame.model.game;
 
+import ca.SumAwesomeGame.model.observer.GameObserver;
 import ca.SumAwesomeGame.model.util.GameMath;
 
-public class GameBoard {
+public class GameBoard implements GameObserver {
     private final Cell[][] board;
+    private Game game;
 
     private final int MIN_VALUE = 0;
     private final int MAX_VALUE = 15;
@@ -30,5 +32,27 @@ public class GameBoard {
 
     public boolean cellUnlocked(int row, int col) {
         return !board[row][col].isCellLocked();
+    }
+
+    private void refreshBoard(){
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                board[i][j] = new Cell(GameMath.getRandomValueBetween(MIN_VALUE, MAX_VALUE));
+            }
+        }
+    }
+
+    @Override
+    public void update() {
+        if (game.allOuterCellsUnlocked()){
+            refreshBoard();
+        }
+    }
+
+    @Override
+    public void listenToGame(Game game) {
+        this.game = game;
+        game.subscribe(this);
+
     }
 }

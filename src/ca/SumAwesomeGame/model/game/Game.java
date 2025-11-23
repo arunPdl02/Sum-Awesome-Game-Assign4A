@@ -1,9 +1,9 @@
 package ca.SumAwesomeGame.model.game;
 
-import ca.SumAwesomeGame.model.character.Enemy;
+import ca.SumAwesomeGame.model.character.EnemyManager;
 import ca.SumAwesomeGame.model.character.Player;
+import ca.SumAwesomeGame.model.observer.GameObserver;
 import ca.SumAwesomeGame.model.stats.Stats;
-import ca.SumAwesomeGame.model.util.GameMath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,69 +11,60 @@ import java.util.Optional;
 
 public class Game {
     public long gameId;
-    public GameBoard board;
-    public Stats stats;
-    private final int NUMBER_OF_ENEMIES = 3;
-    public List<Enemy> listOfEnemies = new ArrayList<>();
-    public Player player;
 
+    public GameBoard board;
+    private EnemyManager enemies;
+
+    public Player player = new Player();
+    private final Fill fill = new Fill();
+    public Stats stats = new Stats();
+
+    private final int NUMBER_OF_ENEMIES = 3;
     public final int ROW_SIZE = 3;
     public final int COL_SIZE = 3;
-    public int playerInputCount;
+
+
+    private static final List<GameObserver> observers = new ArrayList<>();
 
     public Game() {
         gameId = 0;
-        player = new Player();
+        board = new GameBoard(ROW_SIZE, COL_SIZE);
+        enemies = new EnemyManager(NUMBER_OF_ENEMIES);
+
+        board.listenToGame(this);
+        player.listenToGame(this);
+        enemies.listenToGame(this);
+        stats.listenToGame(this);
+        fill.listenToGame(this);
     }
 
-    private void createNewEnemies() {
-        listOfEnemies.clear();
-        for (int i = 0; i < NUMBER_OF_ENEMIES; i++) {
-            listOfEnemies.add(new Enemy(i, player));
-        }
-    }
 
     public List<Integer> getEnemyHealth() {
-        List<Integer> enemyHealth = new ArrayList<>();
-        for (Enemy enemy : listOfEnemies) {
-            enemyHealth.add(enemy.getHealth());
-        }
-        return enemyHealth;
+        return enemies.getEnemyHealth();
     }
 
     public void startNewGame() {
         gameId++;
-        createNewEnemies();
-        board = new GameBoard(ROW_SIZE, COL_SIZE);
-        playerInputCount = 0;
+        enemies.createNewSetOfEnemies();
     }
 
     public int getPlayerHealth() {
         return player.getHealth();
     }
 
-    public int getPlayerFill() {
-        return player.getFillStrength();
+    public int getFill() {
+        return fill.getFillStrength();
     }
 
     public void play(int sum) {
         Cell validCell = isSumValid(sum)
                 .orElseThrow(IllegalArgumentException::new);
         validCell.unlockCell();
-        player.increaseFillStrength(sum);
-        playerInputCount++;
-        if (allOuterCellsUnlocked()) {
-            player.attack();
-            board = new GameBoard(ROW_SIZE, COL_SIZE);
-            player.resetFillStrength();
-        }
-        if (playerInputCount % GameMath.getRandomValueBetween(3, 5) == 0) {
-            Enemy randomEnemy = listOfEnemies.get(GameMath.getRandomValueBetween(0, 2));
-            randomEnemy.attack();
-        }
+        fill.setLastFillIncrease(sum);
+        update();
     }
 
-    private boolean allOuterCellsUnlocked() {
+    public boolean allOuterCellsUnlocked() {
         int count = 0;
         for (int i = 0; i < ROW_SIZE; i++) {
             for (int j = 0; j < COL_SIZE; j++) {
@@ -109,6 +100,17 @@ public class Game {
             }
         }
         return lastMatch;
+    }
+
+
+    public void update(){
+        for (GameObserver e : observers) {
+            e.update();
+        }
+    }
+
+    public void subscribe(GameObserver observer){
+        observers.add(observer);
     }
 
     public String getBoard() {

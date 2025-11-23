@@ -10,7 +10,7 @@ public class Fill implements GameObserver {
     @Override
     public void update() {
         increaseFillStrength(lastFillIncrease);
-        if (game.allOuterCellsUnlocked()){
+        if (game.allOuterCellsUnlocked() || game.startNewGame){
             resetFillStrength();
         }
     }

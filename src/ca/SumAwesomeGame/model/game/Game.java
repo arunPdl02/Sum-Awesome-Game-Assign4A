@@ -23,6 +23,8 @@ public class Game {
     public final int ROW_SIZE = 3;
     public final int COL_SIZE = 3;
 
+    public boolean startNewGame = false;
+
 
     private static final List<GameObserver> observers = new ArrayList<>();
 
@@ -45,7 +47,9 @@ public class Game {
 
     public void startNewGame() {
         gameId++;
-        enemies.createNewSetOfEnemies();
+        startNewGame = true;
+        update();
+        startNewGame = false;
     }
 
     public int getPlayerHealth() {

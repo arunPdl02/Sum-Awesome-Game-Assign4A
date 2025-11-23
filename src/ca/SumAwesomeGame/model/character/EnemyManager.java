@@ -26,6 +26,9 @@ public class EnemyManager implements GameObserver {
             Enemy oneRandomEnemy = listOfEnemies.get(GameMath.getRandomValueBetween(0, 2));
             oneRandomEnemy.attack();
         }
+        if (game.startNewGame){
+            createNewSetOfEnemies();
+        }
     }
 
     @Override
@@ -34,7 +37,7 @@ public class EnemyManager implements GameObserver {
         game.subscribe(this);
     }
 
-    public void createNewSetOfEnemies(){
+    private void createNewSetOfEnemies(){
         listOfEnemies.clear();
         for (int i = 0; i < numberOfEnemies; i++) {
             Enemy e = new Enemy(i, game.player);

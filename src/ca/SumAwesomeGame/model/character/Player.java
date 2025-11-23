@@ -26,7 +26,7 @@ public class Player implements GameObserver {
         return health;
     }
 
-    public void attack() {
+    private void attack() {
 //        Weapon currentWeapon = weapons.equipWeapon();
 //        List<Ring> currentRings = myRings.getActiveRings();
         attack.initiateAttack();
@@ -40,6 +40,9 @@ public class Player implements GameObserver {
     public void update() {
         if (game.allOuterCellsUnlocked()){
             attack();
+        }
+        if (game.startNewGame){
+            health = 1000;
         }
     }
 

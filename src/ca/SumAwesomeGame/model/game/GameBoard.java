@@ -44,7 +44,7 @@ public class GameBoard implements GameObserver {
 
     @Override
     public void update() {
-        if (game.allOuterCellsUnlocked()){
+        if (game.allOuterCellsUnlocked() || game.startNewGame){
             refreshBoard();
         }
     }

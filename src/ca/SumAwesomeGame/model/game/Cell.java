@@ -6,14 +6,18 @@ public class Cell {
     private int value;
     private boolean cellLocked = true;
     private Optional<CellPosition> position = Optional.empty();
+    private final int row;
+    private final int col;
 
     public int getValue() {
         return value;
     }
 
-    public Cell(int value, CellPosition position) {
+    public Cell(int value, CellPosition position, int row, int col) {
         this.value = value;
         this.position = Optional.ofNullable(position);
+        this.row = row;
+        this.col = col;
     }
 
     public void setValue(int value) {
@@ -27,6 +31,14 @@ public class Cell {
     public Optional<CellPosition> unlockCell() {
         cellLocked = false;
         return position;
+    }
+
+    public int getRow(){
+        return row;
+    }
+
+    public int getCol(){
+        return col;
     }
 
     public String toString() {

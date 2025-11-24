@@ -24,7 +24,6 @@ public class Game {
     public final int COL_SIZE = 3;
 
     private boolean startNewGame = false;
-    private int lastFillIncrease = 0;
     private CellPosition lastUnlockedCellPosition;
     private boolean readyToAttack = false;
 
@@ -100,17 +99,13 @@ public class Game {
         lastUnlockedCellPosition = validCell.unlockCell()
                 .orElseThrow(UnsupportedOperationException::new);
 
-        // Store the cell value for backward compatibility with observers
-        lastFillIncrease = validCell.getValue();
-        
-        // Find the row and column of the selected cell
-        int[] cellCoordinates = board.findCellCoordinates(validCell);
-        int cellRow = cellCoordinates[0];
-        int cellCol = cellCoordinates[1];
-        
+
         // Add cell to fill (tracks position, value, order, time, count, and coordinates)
         if (lastUnlockedCellPosition != null) {
-            fill.addCell(lastUnlockedCellPosition, validCell.getValue(), cellRow, cellCol);
+            fill.addCell(lastUnlockedCellPosition,
+                    validCell.getValue(),
+                    validCell.getRow(),
+                    validCell.getCol());
         }
         
         // Replace cells after successful move: center = selected cell value, selected = random
@@ -187,10 +182,6 @@ public class Game {
     // Getters for observer access
     public boolean isStartNewGame() {
         return startNewGame;
-    }
-
-    public int getLastFillIncrease() {
-        return lastFillIncrease;
     }
 
     public boolean isReadyToAttack() {

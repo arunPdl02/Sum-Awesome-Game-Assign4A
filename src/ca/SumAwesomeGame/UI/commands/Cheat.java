@@ -6,13 +6,29 @@ import ca.SumAwesomeGame.model.equipment.rings.Ring;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.game.Game;
 
+/**
+ * Handles cheat commands for testing and debugging purposes.
+ * Provides commands to manipulate game state, equipment, and player stats.
+ * 
+ * @author Sum Awesome Game Team
+ */
 public class Cheat {
     private static Game game;
 
+    /**
+     * Sets the game instance for cheat commands to operate on.
+     * @param gameInstance The game instance
+     */
     public static void setGame(Game gameInstance) {
         game = gameInstance;
     }
 
+    /**
+     * Handles cheat command input and routes to appropriate handler.
+     * Supported commands: weapon, rings, lowhealth, highhealth, max, stats
+     * 
+     * @param input The full cheat command string (e.g., "cheat weapon 1")
+     */
     public static void handleCheat(String input) {
         if (game == null) {
             System.out.println("Error: Game not initialized.");

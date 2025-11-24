@@ -7,21 +7,28 @@ import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.game.AttackResult;
 import ca.SumAwesomeGame.model.game.AttackTarget;
 import ca.SumAwesomeGame.model.game.Game;
-import ca.SumAwesomeGame.model.game.GameBoard;
 import ca.SumAwesomeGame.model.game.Position;
 import ca.SumAwesomeGame.model.util.GameMath;
 
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Main user interface controller for the game.
+ * Handles user input, displays game state, and manages the game loop.
+ * Implements Runnable to run as a separate thread if needed.
+ * 
+ * @author Sum Awesome Game Team
+ */
 public class MainUI implements Runnable{
 
-    private TextUI text = new TextUI();
     private StatsUI statsUI = new StatsUI();
     private Game game;
-    private GameBoard board;
-    private int[] enemyHealth;
 
+    /**
+     * Constructs a new MainUI and initializes the game.
+     * Sets up observers and cheat command access.
+     */
     public MainUI() {
         game = new Game();
 
@@ -84,6 +91,10 @@ public class MainUI implements Runnable{
         }
     }
 
+    /**
+     * Displays the currently equipped weapon and rings.
+     * Shows weapon name and ring names with their abilities.
+     */
     private void showGear() {
         System.out.println("\n=== Current Equipment ===");
         
@@ -112,15 +123,25 @@ public class MainUI implements Runnable{
         
         System.out.println("========================\n");
     }
+    
+    /**
+     * Displays game statistics.
+     */
     private void showStats(){
         StatsUI.displayStats(game);
     }
 
+    /**
+     * Prints the player's current health and fill strength.
+     */
     private void printPlayerStat() {
         System.out.printf("%15s", " [" + game.getPlayerHealth() + "] ");
         System.out.printf("%20s \n", "Fill Strength: " + game.getFill());
     }
 
+    /**
+     * Prints the health values of all enemies.
+     */
     private void printEnemies() {
         List<Integer> enemyHealth = game.getEnemyHealth();
         for (Integer i: enemyHealth){
@@ -129,16 +150,23 @@ public class MainUI implements Runnable{
         System.out.print("\n");
     }
 
+    /**
+     * Starts a new game match.
+     */
     public void startGame() {
         game.startNewGame();
     }
 
+    /**
+     * Prints the current game board state.
+     */
     public void printBoard() {
         System.out.print(game.getBoard());
     }
 
     /**
-     * Displays formatted attack output according to assignment requirements
+     * Displays formatted attack output according to assignment requirements.
+     * Shows fill strength, equipment activations, damage dealt, and enemy kills.
      */
     private void displayAttackOutput() {
         AttackResult result = game.getLastAttackResult();
@@ -259,7 +287,10 @@ public class MainUI implements Runnable{
     }
 
     /**
-     * Handles match end (win or loss) and prompts user for next action
+     * Handles match end (win or loss) and prompts user for next action.
+     * If match is won, awards random equipment to the player.
+     * 
+     * @param won true if match was won, false if match was lost
      */
     private void handleMatchEnd(boolean won) {
         if (won) {

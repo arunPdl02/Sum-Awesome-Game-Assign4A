@@ -6,6 +6,13 @@ import ca.SumAwesomeGame.model.observer.GameObserver;
 
 import java.util.List;
 
+/**
+ * UI component for displaying game statistics.
+ * Automatically displays stats when a match ends (win or loss).
+ * Also provides a static method for manual stats display.
+ * 
+ * @author Sum Awesome Game Team
+ */
 public class StatsUI implements GameObserver {
     private Game game;
     private boolean previousMatchWon = false;

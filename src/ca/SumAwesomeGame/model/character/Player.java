@@ -30,6 +30,14 @@ public class Player implements GameObserver {
         return health;
     }
 
+    public void setHealth(int newHealth) {
+        if (newHealth < 0) {
+            health = 0;
+        } else {
+            health = newHealth;
+        }
+    }
+
     public boolean isDead() {
         return health <= 0;
     }

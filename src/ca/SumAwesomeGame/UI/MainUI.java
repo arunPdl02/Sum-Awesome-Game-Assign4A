@@ -1,6 +1,7 @@
 package ca.SumAwesomeGame.UI;
 
 import ca.SumAwesomeGame.UI.commands.Cheat;
+import ca.SumAwesomeGame.model.equipment.EquipmentFactory;
 import ca.SumAwesomeGame.model.equipment.rings.Ring;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.game.AttackResult;
@@ -8,6 +9,7 @@ import ca.SumAwesomeGame.model.game.AttackTarget;
 import ca.SumAwesomeGame.model.game.Game;
 import ca.SumAwesomeGame.model.game.GameBoard;
 import ca.SumAwesomeGame.model.game.Position;
+import ca.SumAwesomeGame.model.util.GameMath;
 
 import java.util.List;
 import java.util.Map;
@@ -263,7 +265,31 @@ public class MainUI implements Runnable{
         if (won) {
             System.out.println("\n=== MATCH WON! ===");
             System.out.println("All enemies defeated!");
-            // TODO: Give random equipment reward
+            
+            // Give random equipment reward
+            Object reward = EquipmentFactory.getRandomEquipment();
+            if (reward instanceof Weapon) {
+                Weapon weapon = (Weapon) reward;
+                game.getPlayer().equipWeapon(weapon);
+                System.out.println("Reward: " + weapon.getName() + " equipped!");
+            } else if (reward instanceof Ring) {
+                Ring ring = (Ring) reward;
+                int emptySlot = game.getPlayer().getFirstEmptyRingSlot();
+                if (emptySlot != -1) {
+                    game.getPlayer().equipRing(ring, emptySlot);
+                    System.out.println("Reward: " + ring.getName() + " equipped in slot " + (emptySlot + 1) + "!");
+                } else {
+                    // All ring slots full - replace a random slot
+                    int randomSlot = GameMath.getRandomValueBetween(0, 2);
+                    Ring oldRing = game.getPlayer().getEquippedRings()[randomSlot];
+                    game.getPlayer().equipRing(ring, randomSlot);
+                    if (oldRing != null) {
+                        System.out.println("Reward: " + ring.getName() + " equipped in slot " + (randomSlot + 1) + " (replaced " + oldRing.getName() + ")!");
+                    } else {
+                        System.out.println("Reward: " + ring.getName() + " equipped in slot " + (randomSlot + 1) + "!");
+                    }
+                }
+            }
         } else {
             System.out.println("\n=== MATCH LOST ===");
             System.out.println("Your character was defeated!");

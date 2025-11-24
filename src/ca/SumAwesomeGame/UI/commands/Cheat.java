@@ -99,18 +99,33 @@ public class Cheat {
     }
 
     private static void handleLowHealthCheat() {
-        // TODO: Implement low health cheat
-        System.out.println("Low health cheat not yet implemented.");
+        game.getPlayer().setHealth(100);
+        System.out.println("Player health set to 100.");
     }
 
     private static void handleHighHealthCheat() {
-        // TODO: Implement high health cheat
-        System.out.println("High health cheat not yet implemented.");
+        game.getPlayer().setHealth(5000);
+        System.out.println("Player health set to 5000.");
     }
 
     private static void handleMaxCheat(String[] parts) {
-        // TODO: Implement max value cheat
-        System.out.println("Max value cheat not yet implemented.");
+        if (parts.length < 3) {
+            System.out.println("Usage: cheat max <number>");
+            return;
+        }
+        
+        try {
+            int max = Integer.parseInt(parts[2]);
+            if (max < 1) {
+                System.out.println("Error: max must be at least 1");
+                return;
+            }
+            
+            game.getGameBoard().setMaxValue(max);
+            System.out.println("Max cell value set to " + max + " for this match.");
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number. Must be an integer.");
+        }
     }
 
     private static void handleStatsCheat() {

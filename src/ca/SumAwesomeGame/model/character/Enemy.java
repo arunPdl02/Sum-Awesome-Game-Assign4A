@@ -5,8 +5,8 @@ import ca.SumAwesomeGame.model.game.Game;
 public class Enemy{
     private Game game;
     private final int location;
-    private int health = 50;
-    private final int attackStrength = 500;
+    private int health = 150; // Increased for easier testing (survive longer)
+    private final int attackStrength = 200; // Reduced for easier testing (less damage)
     private Player player;
 
     public Enemy(int location, Player player) {

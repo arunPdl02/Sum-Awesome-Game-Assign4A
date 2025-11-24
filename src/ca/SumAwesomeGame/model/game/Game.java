@@ -66,8 +66,16 @@ public class Game {
         return player.isDead();
     }
 
+    public boolean isMatchWon() {
+        return enemies.areAllDead();
+    }
+
     public EnemyManager getEnemyManager() {
         return enemies;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     public int getFill() {
@@ -95,9 +103,14 @@ public class Game {
         // Store the cell value for backward compatibility with observers
         lastFillIncrease = validCell.getValue();
         
-        // Add cell to fill (tracks position, value, order, time, count)
+        // Find the row and column of the selected cell
+        int[] cellCoordinates = board.findCellCoordinates(validCell);
+        int cellRow = cellCoordinates[0];
+        int cellCol = cellCoordinates[1];
+        
+        // Add cell to fill (tracks position, value, order, time, count, and coordinates)
         if (lastUnlockedCellPosition != null) {
-            fill.addCell(lastUnlockedCellPosition, validCell.getValue());
+            fill.addCell(lastUnlockedCellPosition, validCell.getValue(), cellRow, cellCol);
         }
         
         // Replace cells after successful move: center = selected cell value, selected = random
@@ -167,10 +180,6 @@ public class Game {
         return lastUnlockedCellPosition;
     }
 
-    public int getPlayerAttackStrength(){
-        return player.getAttackStrength();
-    }
-
     public boolean didPlayerJustAttack(){
         return player.justAttacked;
     }
@@ -186,10 +195,6 @@ public class Game {
 
     public boolean isReadyToAttack() {
         return readyToAttack;
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 
     public GameBoard getGameBoard() {

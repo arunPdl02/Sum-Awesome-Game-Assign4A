@@ -35,9 +35,10 @@ public class Attack {
         for (Ring ring : rings) {
             if (ring != null) {
                 boolean activated = ring.shouldActivate(fill);
+                double ringBonus = ring.calculateDamageBonus(fill);
                 equipmentActivations.put(ring.getName(), activated);
                 if (activated) {
-                    totalBonusMultiplier *= ring.calculateDamageBonus(fill);
+                    totalBonusMultiplier *= ringBonus;
                 }
             }
         }

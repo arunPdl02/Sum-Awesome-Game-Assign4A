@@ -8,8 +8,8 @@ public class Fill implements GameObserver {
     private Game game;
     private int strength = 0;
     
-    // Track selected cells
-    private Set<CellPosition> selectedCells = new HashSet<>();
+    // Track selected cells by individual cell coordinates (row,col)
+    private Set<String> selectedCells = new HashSet<>();
     
     // Track selection order (values in order they were selected)
     private List<Integer> selectionOrder = new ArrayList<>();
@@ -40,15 +40,20 @@ public class Fill implements GameObserver {
 
     /**
      * Adds a cell to the fill and updates all tracking information
+     * @param position The CellPosition (column) for enemy targeting
+     * @param value The cell value
+     * @param row The row coordinate of the cell
+     * @param col The column coordinate of the cell
      */
-    public void addCell(CellPosition position, int value) {
+    public void addCell(CellPosition position, int value, int row, int col) {
         // Start timer if this is the first cell
         if (selectedCells.isEmpty()) {
             fillStartTime = System.currentTimeMillis();
         }
         
-        // Add to selected cells set
-        selectedCells.add(position);
+        // Add to selected cells set by individual cell coordinates
+        String cellKey = row + "," + col;
+        selectedCells.add(cellKey);
         
         // Add to selection order
         selectionOrder.add(value);
@@ -59,7 +64,7 @@ public class Fill implements GameObserver {
         // Update strength
         strength += value;
         
-        // Track the last unlocked cell position
+        // Track the last unlocked cell position (for enemy targeting)
         lastUnlockedCellPosition = position;
     }
 
@@ -88,9 +93,9 @@ public class Fill implements GameObserver {
     }
 
     /**
-     * Returns the set of selected cell positions
+     * Returns the set of selected cell coordinates (as "row,col" strings)
      */
-    public Set<CellPosition> getSelectedCells() {
+    public Set<String> getSelectedCells() {
         return new HashSet<>(selectedCells);
     }
 
@@ -133,14 +138,14 @@ public class Fill implements GameObserver {
     }
 
     /**
-     * Checks if selection order is ascending
+     * Checks if selection order is ascending (non-decreasing, allows duplicates)
      */
     public boolean isAscending() {
         if (selectionOrder.size() < 2) {
             return false;
         }
         for (int i = 1; i < selectionOrder.size(); i++) {
-            if (selectionOrder.get(i) <= selectionOrder.get(i - 1)) {
+            if (selectionOrder.get(i) < selectionOrder.get(i - 1)) {
                 return false;
             }
         }
@@ -148,14 +153,14 @@ public class Fill implements GameObserver {
     }
 
     /**
-     * Checks if selection order is descending
+     * Checks if selection order is descending (non-increasing, allows duplicates)
      */
     public boolean isDescending() {
         if (selectionOrder.size() < 2) {
             return false;
         }
         for (int i = 1; i < selectionOrder.size(); i++) {
-            if (selectionOrder.get(i) >= selectionOrder.get(i - 1)) {
+            if (selectionOrder.get(i) > selectionOrder.get(i - 1)) {
                 return false;
             }
         }

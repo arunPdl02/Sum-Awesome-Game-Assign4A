@@ -15,19 +15,12 @@ public class Player implements GameObserver {
     private Ring[] equippedRings = new Ring[3]; // null = empty slot
     public boolean justAttacked = false;
 
-
-    private int attackStrength;
-    private int health = 1000;
+    private int health = 3000; // Increased for easier testing
 
     public Player() {
     }
 
-    public int getAttackStrength() {
-        return attackStrength;
-    }
-
     public void resetAttack(){
-        attackStrength = 0;
         justAttacked = false;
     }
 
@@ -52,8 +45,6 @@ public class Player implements GameObserver {
             });
         }
         
-        // Store attack strength for backward compatibility
-        attackStrength = result.getBaseDamage();
         justAttacked = true;
     }
 
@@ -118,13 +109,12 @@ public class Player implements GameObserver {
     @Override
     public void update() {
         if (game.isReadyToAttack()){
-            attack();
-            justAttacked = true;
+            attack(); // Sets justAttacked = true internally
         } else if (justAttacked) {
             resetAttack();
         }
         if (game.isStartNewGame()) {
-            health = 1000;
+            health = 3000; // Reset to increased health
             resetAttack();
         }
     }

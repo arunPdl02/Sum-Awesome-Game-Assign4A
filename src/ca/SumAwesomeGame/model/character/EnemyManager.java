@@ -30,28 +30,17 @@ public class EnemyManager implements GameObserver {
             if (!listOfEnemies.isEmpty()) {
                 int randomIndex = GameMath.getRandomValueBetween(0, listOfEnemies.size() - 1);
                 Enemy oneRandomEnemy = listOfEnemies.get(randomIndex);
-                oneRandomEnemy.attack();
-            }
+            oneRandomEnemy.attack();
+        }
             // Reset counter and pick new random interval for next attack
             turnsSinceLastAttack = 0;
             attackInterval = GameMath.getRandomValueBetween(3, 5);
         }
-        // Note: Player attack damage is now handled in Player.attack() method
-        // No need to call enemyAttacked() here anymore
-        
         if (game.isStartNewGame()) {
             createNewSetOfEnemies();
             // Reset attack timing for new match
             turnsSinceLastAttack = 0;
             attackInterval = GameMath.getRandomValueBetween(3, 5);
-        }
-    }
-
-    private void enemyAttacked(CellPosition lastUnlockedCellPosition) {
-        switch (lastUnlockedCellPosition){
-            case ONE -> listOfEnemies.getFirst().reduceHealth(game.getPlayerAttackStrength());
-            case TWO -> listOfEnemies.get(1).reduceHealth(game.getPlayerAttackStrength());
-            case THREE -> listOfEnemies.get(2).reduceHealth(game.getPlayerAttackStrength());
         }
     }
 

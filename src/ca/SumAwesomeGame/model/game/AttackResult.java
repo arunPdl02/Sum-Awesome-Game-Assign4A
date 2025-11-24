@@ -1,8 +1,5 @@
 package ca.SumAwesomeGame.model.game;
 
-import ca.SumAwesomeGame.model.equipment.rings.Ring;
-import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

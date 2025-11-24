@@ -31,24 +31,31 @@ public class GameBoard implements GameObserver {
     }
 
     /**
+     * Finds the row and column coordinates of a cell in the board
+     * @param cell The cell to find
+     * @return int array [row, col], or [-1, -1] if not found
+     */
+    public int[] findCellCoordinates(Cell cell) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == cell) {
+                    return new int[]{i, j};
+                }
+            }
+        }
+        return new int[]{-1, -1};
+    }
+
+    /**
      * Replaces cells after a successful move:
      * - Center cell (1,1) gets the selected cell's value
      * - Selected cell gets a new random value
      */
     public void replaceCellsAfterMove(Cell selectedCell) {
         // Find the selected cell's position in the board
-        int selectedRow = -1;
-        int selectedCol = -1;
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] == selectedCell) {
-                    selectedRow = i;
-                    selectedCol = j;
-                    break;
-                }
-            }
-            if (selectedRow != -1) break;
-        }
+        int[] coordinates = findCellCoordinates(selectedCell);
+        int selectedRow = coordinates[0];
+        int selectedCol = coordinates[1];
         
         // If cell not found, return early
         if (selectedRow == -1 || selectedCol == -1) {

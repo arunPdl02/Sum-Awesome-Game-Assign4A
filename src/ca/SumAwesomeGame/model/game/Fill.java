@@ -23,10 +23,10 @@ public class Fill implements GameObserver {
     @Override
     public void update() {
         if (game.isStartNewGame() || game.didPlayerJustAttack() ){
-            resetFillStrength();
-        } else {
-            increaseFillStrength(game.getLastFillIncrease());
+            reset();
         }
+        // Fill strength is now updated via addCell() method called directly from Game.play()
+        // This update() method only handles reset scenarios
     }
 
     @Override

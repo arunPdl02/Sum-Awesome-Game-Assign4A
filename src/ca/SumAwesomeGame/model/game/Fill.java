@@ -79,4 +79,35 @@ public class Fill implements GameObserver {
     public void resetFillStrength(){
         reset();
     }
+
+    /**
+     * Returns the set of selected cell positions
+     */
+    public Set<CellPosition> getSelectedCells() {
+        return new HashSet<>(selectedCells);
+    }
+
+    /**
+     * Returns the selection order (list of cell values in order)
+     */
+    public List<Integer> getSelectionOrder() {
+        return new ArrayList<>(selectionOrder);
+    }
+
+    /**
+     * Returns the time elapsed since fill started in seconds
+     */
+    public long getTimeElapsed() {
+        if (fillStartTime == 0) {
+            return 0;
+        }
+        return (System.currentTimeMillis() - fillStartTime) / 1000;
+    }
+
+    /**
+     * Returns the total number of cell additions (including re-selections)
+     */
+    public int getCellCount() {
+        return cellCount;
+    }
 }

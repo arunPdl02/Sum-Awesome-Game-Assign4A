@@ -45,7 +45,6 @@ public class EnemyManager implements GameObserver {
     }
 
     private void enemyAttacked(CellPosition lastUnlockedCellPosition) {
-        System.out.println("here" + game.getPlayerAttackStrength() + lastUnlockedCellPosition);
         switch (lastUnlockedCellPosition){
             case ONE -> listOfEnemies.getFirst().reduceHealth(game.getPlayerAttackStrength());
             case TWO -> listOfEnemies.get(1).reduceHealth(game.getPlayerAttackStrength());

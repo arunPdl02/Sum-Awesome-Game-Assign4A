@@ -4,7 +4,6 @@ public class Attack {
     private int attackStrength;
 
     public Attack(int fill) {
-        System.out.println("Player attacked!");
         attackStrength = fill;
     }
 

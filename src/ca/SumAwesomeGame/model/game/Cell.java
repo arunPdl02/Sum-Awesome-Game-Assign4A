@@ -2,6 +2,13 @@ package ca.SumAwesomeGame.model.game;
 
 import java.util.Optional;
 
+/**
+ * Represents a single cell in the game board grid.
+ * Each cell contains a numeric value, position information, and lock state.
+ * Cells can be locked (not yet selected) or unlocked (part of current fill).
+ * 
+ * @author Sum Awesome Game Team
+ */
 public class Cell {
     private int value;
     private boolean cellLocked = true;

@@ -28,6 +28,7 @@ public class Game {
     public final int COL_SIZE = 3;
 
     private boolean startNewGame = false;
+    private int lastFillIncrease = 0;
     private CellPosition lastUnlockedCellPosition;
     private boolean readyToAttack = false;
 
@@ -153,7 +154,9 @@ public class Game {
         lastUnlockedCellPosition = validCell.unlockCell()
                 .orElseThrow(UnsupportedOperationException::new);
 
-
+        // Store the cell value for backward compatibility with observers
+        lastFillIncrease = validCell.getValue();
+        
         // Add cell to fill (tracks position, value, order, time, count, and coordinates)
         if (lastUnlockedCellPosition != null) {
             fill.addCell(lastUnlockedCellPosition,

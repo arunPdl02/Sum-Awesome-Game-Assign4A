@@ -3,7 +3,11 @@ package ca.SumAwesomeGame.model.equipment.rings;
 import ca.SumAwesomeGame.model.game.Fill;
 
 /**
- * The Big One: 50% damage bonus if strength >= 160
+ * The Big One ring implementation.
+ * Provides a 50% damage bonus when fill strength meets or exceeds the threshold.
+ * Ring bonuses are multiplicative with other active rings.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class TheBigOne implements Ring {
     private static final int STRENGTH_THRESHOLD = 50; // TESTING: 50 (normally 160)

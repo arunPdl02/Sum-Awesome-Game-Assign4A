@@ -4,6 +4,13 @@ import ca.SumAwesomeGame.model.observer.GameObserver;
 
 import java.util.*;
 
+/**
+ * Tracks the current fill state, including selected cells, strength, timing, and selection order.
+ * A fill is completed when all 8 outer cells of the board have been selected.
+ * Implements GameObserver to reset when a new game starts or after an attack.
+ * 
+ * @author Sum Awesome Game Team
+ */
 public class Fill implements GameObserver {
     private Game game;
     private int strength = 0;
@@ -68,16 +75,17 @@ public class Fill implements GameObserver {
         lastUnlockedCellPosition = position;
     }
 
+    /**
+     * Gets the current fill strength (sum of all selected cell values).
+     * @return Current fill strength
+     */
     public int getFillStrength(){
         return strength;
     }
 
-    public void increaseFillStrength(int increase){
-        strength += increase;
-    }
-
     /**
-     * Resets all fill state for a new fill
+     * Resets all fill state for a new fill.
+     * Clears selected cells, selection order, timing, and resets strength to 0.
      */
     public void reset() {
         strength = 0;
@@ -86,10 +94,6 @@ public class Fill implements GameObserver {
         fillStartTime = 0;
         cellCount = 0;
         lastUnlockedCellPosition = null;
-    }
-
-    public void resetFillStrength(){
-        reset();
     }
 
     /**

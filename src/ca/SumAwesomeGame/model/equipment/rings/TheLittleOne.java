@@ -3,7 +3,11 @@ package ca.SumAwesomeGame.model.equipment.rings;
 import ca.SumAwesomeGame.model.game.Fill;
 
 /**
- * The Little One: 50% damage bonus if strength <= 90
+ * The Little One ring implementation.
+ * Provides a 50% damage bonus when fill strength is at or below the threshold.
+ * Ring bonuses are multiplicative with other active rings.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class TheLittleOne implements Ring {
     private static final int STRENGTH_THRESHOLD = 200; // TESTING: 200 (normally 90)

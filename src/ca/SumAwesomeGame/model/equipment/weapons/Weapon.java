@@ -10,6 +10,9 @@ import java.util.List;
 /**
  * Interface for weapons that modify player attacks.
  * Each weapon can activate based on fill properties and modify targeting.
+ * Follows the Open-Closed Principle: new weapons can be added without modifying existing code.
+ * 
+ * @author Sum Awesome Game Team
  */
 public interface Weapon {
     /**

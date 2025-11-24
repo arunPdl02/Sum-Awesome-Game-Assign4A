@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Stone Hammer: If fill completed with 10+ cells, hits all opponents at 80%
+ * Stone Hammer weapon implementation.
+ * Activates when fill is completed with a sufficient number of cell selections.
+ * When activated, hits all enemy characters at 80% damage.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class StoneHammer implements Weapon {
     private static final int CELL_COUNT_THRESHOLD = 5; // TESTING: 5 cells (normally 10)
@@ -29,11 +33,7 @@ public class StoneHammer implements Weapon {
         List<AttackTarget> targets = new ArrayList<>();
         
         if (shouldActivate(fill)) {
-            // Hit all opponents at 80%
-            // Primary target is already handled at 100%, so we add all three at 80%
-            // But wait - if we add primary at 80%, it might override the 100%?
-            // Actually, I think the intent is: primary gets 100% (normal), others get 80%
-            // So we add the other two at 80%
+            // Hit all opponents at 80% (primary target already gets 100% from base attack)
             for (Position pos : Position.values()) {
                 if (pos != primaryTarget && team.getEnemyAt(pos).isPresent()) {
                     targets.add(new AttackTarget(pos, 0.8, false));

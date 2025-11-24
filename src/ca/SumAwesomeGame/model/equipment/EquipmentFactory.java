@@ -6,7 +6,10 @@ import ca.SumAwesomeGame.model.util.GameMath;
 
 /**
  * Factory for creating weapons and rings.
- * Provides methods to create equipment by ID or randomly.
+ * Implements the Factory pattern to centralize equipment creation.
+ * Provides methods to create equipment by ID or randomly for rewards.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class EquipmentFactory {
     // Weapon IDs: 1-6

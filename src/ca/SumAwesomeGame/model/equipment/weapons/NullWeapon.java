@@ -10,6 +10,10 @@ import java.util.List;
 
 /**
  * Null Object pattern implementation for when player has no weapon equipped.
+ * Prevents null checks throughout the codebase by providing a safe default behavior.
+ * Never activates and never adds additional attack targets.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class NullWeapon implements Weapon {
     @Override

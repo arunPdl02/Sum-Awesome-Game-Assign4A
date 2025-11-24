@@ -3,6 +3,13 @@ package ca.SumAwesomeGame.model.game;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 import ca.SumAwesomeGame.model.util.GameMath;
 
+/**
+ * Manages the 3x3 game board grid of cells.
+ * Handles cell initialization, replacement after moves, and max value configuration.
+ * Implements GameObserver to reset the board when a new game starts or fill completes.
+ * 
+ * @author Sum Awesome Game Team
+ */
 public class GameBoard implements GameObserver {
     private final Cell[][] board;
     private Game game;
@@ -30,24 +37,42 @@ public class GameBoard implements GameObserver {
         return !board[row][col].isCellLocked();
     }
 
-
     /**
      * Replaces cells after a successful move:
      * - Center cell (1,1) gets the selected cell's value
-     * - Selected cell gets a new random value
+     * - Selected cell gets a new random value within current max value range
      */
     public void replaceCellsAfterMove(Cell selectedCell) {
-        // Replace center cell with selected cell's value
-        board[1][1].setValue(selectedCell.getValue());
-
-        // Replace selected cell with random value
+        int[] coordinates = findCellCoordinates(selectedCell);
+        int selectedRow = coordinates[0];
+        int selectedCol = coordinates[1];
+        
+        if (selectedRow == -1 || selectedCol == -1) {
+            return; // Cell not found, cannot proceed
+        }
+        
+        int selectedCellValue = selectedCell.getValue();
+        board[1][1].setValue(selectedCellValue);
+        
+        // Generate new random value respecting current max value (may be modified by cheat)
         int newRandomValue = GameMath.getRandomValueBetween(MIN_VALUE, maxValue);
-        int newRandomValue = GameMath.getRandomValueBetween(MIN_VALUE, MAX_VALUE);
-
-        int selectedRow = selectedCell.getRow();
-        int selectedCol = selectedCell.getCol();
-
         board[selectedRow][selectedCol].setValue(newRandomValue);
+    }
+    
+    /**
+     * Finds the row and column coordinates of a cell in the board
+     * @param cell The cell to find
+     * @return int array [row, col], or [-1, -1] if not found
+     */
+    public int[] findCellCoordinates(Cell cell) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == cell) {
+                    return new int[]{i, j};
+                }
+            }
+        }
+        return new int[]{-1, -1};
     }
 
     private void initializeBoard() {
@@ -98,7 +123,6 @@ public class GameBoard implements GameObserver {
             if (game.isStartNewGame()) {
                 resetMaxValue(); // Reset to default when new match starts
             }
-        if (game.fillComplete() || game.isStartNewGame()) {
             initializeBoard();
         }
     }

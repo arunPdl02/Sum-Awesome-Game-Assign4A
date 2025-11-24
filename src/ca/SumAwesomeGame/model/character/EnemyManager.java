@@ -10,6 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Manages the team of enemy characters (opponents).
+ * Handles enemy creation, periodic attacks, failed-move attacks, and position-based targeting.
+ * Implements GameObserver to create new enemies when a match starts.
+ * 
+ * @author Sum Awesome Game Team
+ */
 public class EnemyManager implements GameObserver {
     private Game game;
     private final List<Enemy> listOfEnemies = new ArrayList<>();
@@ -25,20 +32,22 @@ public class EnemyManager implements GameObserver {
     @Override
     public void update() {
         turnsSinceLastAttack++;
+        
+        // Periodic enemy attacks every 3-5 turns (randomly determined)
         if (turnsSinceLastAttack >= attackInterval) {
-            // Attack with a random enemy
             if (!listOfEnemies.isEmpty()) {
                 int randomIndex = GameMath.getRandomValueBetween(0, listOfEnemies.size() - 1);
                 Enemy oneRandomEnemy = listOfEnemies.get(randomIndex);
-            oneRandomEnemy.attack();
-        }
+                oneRandomEnemy.attack();
+            }
             // Reset counter and pick new random interval for next attack
             turnsSinceLastAttack = 0;
             attackInterval = GameMath.getRandomValueBetween(3, 5);
         }
+        
+        // Create new enemies when a new match starts
         if (game.isStartNewGame()) {
             createNewSetOfEnemies();
-            // Reset attack timing for new match
             turnsSinceLastAttack = 0;
             attackInterval = GameMath.getRandomValueBetween(3, 5);
         }
@@ -139,10 +148,11 @@ public class EnemyManager implements GameObserver {
     }
 
     /**
-     * Converts CellPosition to Position for targeting
-     * ONE (left 3 cells) -> LEFT
-     * TWO (middle 2 cells) -> MIDDLE
-     * THREE (right 3 cells) -> RIGHT
+     * Converts CellPosition to Position for targeting.
+     * ONE (left 3 cells) -> LEFT, TWO (middle 2 cells) -> MIDDLE, THREE (right 3 cells) -> RIGHT
+     * 
+     * AI Assistance: This asymmetric mapping between board cells (3-2-3) and enemy positions (1-1-1)
+     * required AI assistance after extended debugging.
      */
     public Position cellPositionToPosition(CellPosition cellPosition) {
         return switch (cellPosition) {
@@ -150,6 +160,17 @@ public class EnemyManager implements GameObserver {
             case TWO -> Position.MIDDLE;
             case THREE -> Position.RIGHT;
         };
+    }
+
+    /**
+     * Sets the health of all enemies to the specified value.
+     * Used for cheat commands to modify enemy difficulty.
+     * @param health The health value to set for all enemies
+     */
+    public void setAllEnemyHealth(int health) {
+        for (Enemy enemy : listOfEnemies) {
+            enemy.setHealth(health);
+        }
     }
 
 }

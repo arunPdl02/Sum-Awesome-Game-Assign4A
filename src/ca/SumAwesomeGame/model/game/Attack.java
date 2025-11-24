@@ -12,6 +12,14 @@ import java.util.Map;
 
 /**
  * Represents a player attack with equipment bonuses and targeting.
+ * Calculates base damage from fill strength, applies ring bonuses (multiplicative),
+ * 
+ * determines primary target from last unlocked cell, and adds weapon-specific targets.
+ * 
+ * AI Assistance: This complex integration of multiplicative ring bonuses, weapon targeting,
+ * and multi-target damage calculation required AI assistance after extended debugging.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class Attack {
     private final AttackResult result;
@@ -20,7 +28,7 @@ public class Attack {
         // Get base damage from fill strength
         int baseDamage = fill.getFillStrength();
         
-        // Calculate ring bonuses (multiply all active ring bonuses)
+        // AI Assistance: Multiplicative ring bonus calculation
         double totalBonusMultiplier = 1.0;
         Map<String, Boolean> equipmentActivations = new HashMap<>();
         
@@ -31,7 +39,7 @@ public class Attack {
         boolean weaponActivated = weapon.shouldActivate(fill);
         equipmentActivations.put(weapon.getName(), weaponActivated);
         
-        // Check and apply ring bonuses
+        // AI Assistance: Iterative multiplicative bonus application
         for (Ring ring : rings) {
             if (ring != null) {
                 boolean activated = ring.shouldActivate(fill);
@@ -43,7 +51,7 @@ public class Attack {
             }
         }
         
-        // Get primary target from last unlocked cell position
+        // AI Assistance: Cell position to enemy position mapping
         CellPosition lastCellPosition = fill.getLastUnlockedCellPosition();
         if (lastCellPosition == null) {
             // Fallback: use first position if no cell position available
@@ -51,7 +59,7 @@ public class Attack {
         }
         Position primaryTarget = enemyManager.cellPositionToPosition(lastCellPosition);
         
-        // Build list of attack targets
+        // AI Assistance: Multi-target system with primary + weapon-added targets
         List<AttackTarget> targets = new ArrayList<>();
         
         // Primary target always gets hit at 100% (base attack)

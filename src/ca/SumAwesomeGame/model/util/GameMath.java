@@ -2,6 +2,12 @@ package ca.SumAwesomeGame.model.util;
 
 import java.util.Random;
 
+/**
+ * Utility class for mathematical operations used in the game.
+ * Provides random number generation, prime checking, and power-of-two checking.
+ * 
+ * @author Sum Awesome Game Team
+ */
 public class GameMath {
     static Random random = new Random();
 

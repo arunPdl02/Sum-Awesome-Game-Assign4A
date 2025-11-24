@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Diamond Sword: If fill is in descending order, hits primary at 100% and sides at 75%
+ * Diamond Sword weapon implementation.
+ * Activates when cells are selected in descending order (non-increasing).
+ * When activated, hits the primary target at 100% damage and adjacent enemies at 75% damage.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class DiamondSword implements Weapon {
     @Override

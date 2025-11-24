@@ -9,7 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Sparkle Dagger: If fill completed in <20s, targets additional random enemy at 50% damage
+ * Sparkle Dagger weapon implementation.
+ * Activates when fill is completed in less than the time threshold.
+ * When activated, targets an additional random enemy at 50% damage.
+ * The additional target may be the same as the primary target.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class SparkleDagger implements Weapon {
     private static final int TIME_THRESHOLD_SECONDS = 180; // TESTING: 180 seconds (normally 20)

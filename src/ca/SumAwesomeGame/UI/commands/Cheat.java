@@ -114,14 +114,22 @@ public class Cheat {
         }
     }
 
+    /**
+     * Sets all enemies to very low health (~1 hit to kill).
+     * This setting persists only until the end of the match.
+     */
     private static void handleLowHealthCheat() {
-        game.getPlayer().setHealth(100);
-        System.out.println("Player health set to 100.");
+        game.getEnemyManager().setAllEnemyHealth(50);
+        System.out.println("All enemies health set to 50 (very low - ~1 hit to kill).");
     }
 
+    /**
+     * Sets all enemies to high health (hard to kill).
+     * This setting persists only until the end of the match.
+     */
     private static void handleHighHealthCheat() {
-        game.getPlayer().setHealth(5000);
-        System.out.println("Player health set to 5000.");
+        game.getEnemyManager().setAllEnemyHealth(1000);
+        System.out.println("All enemies health set to 1000 (high - hard to kill).");
     }
 
     private static void handleMaxCheat(String[] parts) {

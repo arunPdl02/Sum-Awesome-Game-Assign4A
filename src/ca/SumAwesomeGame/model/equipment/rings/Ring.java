@@ -5,6 +5,10 @@ import ca.SumAwesomeGame.model.game.Fill;
 /**
  * Interface for rings that modify player attack damage.
  * Each ring can activate based on fill properties and provide damage bonuses.
+ * Follows the Open-Closed Principle: new rings can be added without modifying existing code.
+ * Ring bonuses are multiplicative when multiple rings activate.
+ * 
+ * @author Sum Awesome Game Team
  */
 public interface Ring {
     /**

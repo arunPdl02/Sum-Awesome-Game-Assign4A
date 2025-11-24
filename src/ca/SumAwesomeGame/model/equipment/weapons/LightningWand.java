@@ -9,7 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Lightning Wand: If fill completed in <10s, targets additional random enemy at 100% damage
+ * Lightning Wand weapon implementation.
+ * Activates when fill is completed in less than the time threshold.
+ * When activated, targets an additional random enemy at 100% damage.
+ * The additional target may be the same as the primary target.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class LightningWand implements Weapon {
     private static final int TIME_THRESHOLD_SECONDS = 120; // TESTING: 120 seconds (normally 10)

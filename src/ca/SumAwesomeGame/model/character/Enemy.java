@@ -1,9 +1,13 @@
 package ca.SumAwesomeGame.model.character;
 
-import ca.SumAwesomeGame.model.game.Game;
-
+/**
+ * Represents an enemy character in the opponent team.
+ * Each enemy has a location (LEFT, MIDDLE, or RIGHT), health, and attack strength.
+ * Enemies attack the player character periodically or when the player makes a failed move.
+ * 
+ * @author Sum Awesome Game Team
+ */
 public class Enemy{
-    private Game game;
     private final int location;
     private int health = 150; // Increased for easier testing (survive longer)
     private final int attackStrength = 200; // Reduced for easier testing (less damage)

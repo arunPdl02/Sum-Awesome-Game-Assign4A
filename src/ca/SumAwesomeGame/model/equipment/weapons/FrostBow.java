@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Frost Bow: If fill is in ascending order, hits all opponents at 100%
+ * Frost Bow weapon implementation.
+ * Activates when cells are selected in ascending order (non-decreasing).
+ * When activated, hits all enemy characters at 100% damage.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class FrostBow implements Weapon {
     @Override

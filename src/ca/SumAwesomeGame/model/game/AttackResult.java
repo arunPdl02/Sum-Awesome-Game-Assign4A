@@ -7,6 +7,9 @@ import java.util.Map;
 
 /**
  * Represents the result of a player attack, including targets, damage, and equipment activations.
+ * Encapsulates all information needed to display and apply the attack.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class AttackResult {
     private final int baseDamage;
@@ -39,7 +42,9 @@ public class AttackResult {
     }
 
     /**
-     * Calculates the final damage for a target based on its multiplier
+     * Calculates the final damage for a target based on its multiplier.
+     * AI Assistance: Complex damage calculation combining base damage, multiplicative ring bonuses,
+     * and per-target damage multipliers.
      */
     public int calculateDamageForTarget(AttackTarget target) {
         double finalMultiplier = totalBonusMultiplier * target.getDamageMultiplier();

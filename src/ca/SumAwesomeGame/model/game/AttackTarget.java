@@ -2,6 +2,9 @@ package ca.SumAwesomeGame.model.game;
 
 /**
  * Represents a target for an attack, including position and damage multiplier.
+ * Used to track which enemies are hit and at what damage percentage.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class AttackTarget {
     private final Position targetPosition;

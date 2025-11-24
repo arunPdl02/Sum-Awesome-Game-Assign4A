@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Fire Staff: If fill completed with 15+ cells, hits primary target at 100% and sides at 50%
+ * Fire Staff weapon implementation.
+ * Activates when fill is completed with a sufficient number of cell selections.
+ * When activated, hits the primary target at 100% damage and adjacent enemies at 50% damage.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class FireStaff implements Weapon {
     private static final int CELL_COUNT_THRESHOLD = 5; // TESTING: 5 cells (normally 15)

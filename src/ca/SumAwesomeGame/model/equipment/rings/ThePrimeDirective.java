@@ -4,7 +4,11 @@ import ca.SumAwesomeGame.model.game.Fill;
 import ca.SumAwesomeGame.model.util.GameMath;
 
 /**
- * The Prime Directive: 100% damage bonus if strength is prime
+ * The Prime Directive ring implementation.
+ * Provides a 100% damage bonus when fill strength is a prime number.
+ * Ring bonuses are multiplicative with other active rings.
+ * 
+ * @author Sum Awesome Game Team
  */
 public class ThePrimeDirective implements Ring {
     private static final double BONUS_MULTIPLIER = 2.0; // 100% bonus

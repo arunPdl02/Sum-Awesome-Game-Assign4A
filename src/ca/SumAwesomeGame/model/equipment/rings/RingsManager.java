@@ -1,14 +1,11 @@
 package ca.SumAwesomeGame.model.equipment.rings;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+/**
+ * @deprecated This class is no longer used. Equipment management is now handled directly in Player class.
+ * Kept for backward compatibility but not actively used.
+ */
+@Deprecated
 public class RingsManager {
-    private final List<Ring> listOfRings = Arrays.asList(Ring.values());
-    private List<Ring> activeRings = new ArrayList<>(); // is set by observing stats class
-
-    public List<Ring> getActiveRings() {
-        return activeRings;
-    }
+    // This class is deprecated and no longer used
+    // Equipment management is now in Player class
 }

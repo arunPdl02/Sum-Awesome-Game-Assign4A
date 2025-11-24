@@ -1,15 +1,11 @@
 package ca.SumAwesomeGame.model.equipment.weapons;
 
-import ca.SumAwesomeGame.model.stats.Stats;
-
-import java.util.Arrays;
-import java.util.List;
-
+/**
+ * @deprecated This class is no longer used. Equipment management is now handled directly in Player class.
+ * Kept for backward compatibility but not actively used.
+ */
+@Deprecated
 public class WeaponsManager {
-    private final List<Weapon> listOfWeapons = Arrays.asList(Weapon.values());
-    private Weapon activeWeapon;
-
-    public Weapon equipWeapon() {
-        return activeWeapon;
-    }
+    // This class is deprecated and no longer used
+    // Equipment management is now in Player class
 }

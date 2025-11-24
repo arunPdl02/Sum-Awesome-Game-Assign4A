@@ -1,5 +1,6 @@
 package ca.SumAwesomeGame.UI.commands;
 
+import ca.SumAwesomeGame.UI.StatsUI;
 import ca.SumAwesomeGame.model.equipment.EquipmentFactory;
 import ca.SumAwesomeGame.model.equipment.rings.Ring;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
@@ -113,7 +114,6 @@ public class Cheat {
     }
 
     private static void handleStatsCheat() {
-        // TODO: Implement stats display
-        System.out.println("Stats cheat not yet implemented.");
+        StatsUI.displayStats(game);
     }
 }

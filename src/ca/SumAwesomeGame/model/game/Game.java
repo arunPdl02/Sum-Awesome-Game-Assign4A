@@ -205,4 +205,8 @@ public class Game {
         return player.getLastAttackResult();
     }
 
+    public Stats getStats() {
+        return stats;
+    }
+
 }

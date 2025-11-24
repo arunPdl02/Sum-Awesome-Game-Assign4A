@@ -113,6 +113,10 @@ public class Player implements GameObserver {
         if (health < 0) {
             health = 0;
         }
+        // Notify Stats about damage received
+        if (game != null && game.getStats() != null) {
+            game.getStats().recordDamage(EnemyAttackStrength);
+        }
     }
 
     @Override

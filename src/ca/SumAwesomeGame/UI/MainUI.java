@@ -111,6 +111,7 @@ public class MainUI implements Runnable{
         System.out.println("========================\n");
     }
     private void showStats(){
+        StatsUI.displayStats(game);
     }
 
     private void printPlayerStat() {

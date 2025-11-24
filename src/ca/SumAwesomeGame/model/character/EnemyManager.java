@@ -36,9 +36,10 @@ public class EnemyManager implements GameObserver {
             turnsSinceLastAttack = 0;
             attackInterval = GameMath.getRandomValueBetween(3, 5);
         }
-        if (game.didPlayerJustAttack()){
-            enemyAttacked(game.getLastUnlockedCellPosition());
-        } else if (game.isStartNewGame()) {
+        // Note: Player attack damage is now handled in Player.attack() method
+        // No need to call enemyAttacked() here anymore
+        
+        if (game.isStartNewGame()) {
             createNewSetOfEnemies();
             // Reset attack timing for new match
             turnsSinceLastAttack = 0;

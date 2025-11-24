@@ -19,6 +19,9 @@ public class Fill implements GameObserver {
     
     // Track total cell count (including re-selections)
     private int cellCount = 0;
+    
+    // Track the most recently unlocked cell position
+    private CellPosition lastUnlockedCellPosition;
 
     @Override
     public void update() {
@@ -55,6 +58,9 @@ public class Fill implements GameObserver {
         
         // Update strength
         strength += value;
+        
+        // Track the last unlocked cell position
+        lastUnlockedCellPosition = position;
     }
 
     public int getFillStrength(){
@@ -74,6 +80,7 @@ public class Fill implements GameObserver {
         selectionOrder.clear();
         fillStartTime = 0;
         cellCount = 0;
+        lastUnlockedCellPosition = null;
     }
 
     public void resetFillStrength(){
@@ -109,6 +116,13 @@ public class Fill implements GameObserver {
      */
     public int getCellCount() {
         return cellCount;
+    }
+
+    /**
+     * Returns the last unlocked cell position (most recently added to fill)
+     */
+    public CellPosition getLastUnlockedCellPosition() {
+        return lastUnlockedCellPosition;
     }
 
     /**

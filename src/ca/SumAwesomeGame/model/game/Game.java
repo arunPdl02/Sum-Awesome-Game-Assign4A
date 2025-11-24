@@ -66,8 +66,16 @@ public class Game {
         return player.isDead();
     }
 
+    public EnemyManager getEnemyManager() {
+        return enemies;
+    }
+
     public int getFill() {
         return fill.getFillStrength();
+    }
+
+    public Fill getFillObject() {
+        return fill;
     }
 
     public boolean play(int sum) {

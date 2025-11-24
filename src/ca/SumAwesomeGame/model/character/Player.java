@@ -4,6 +4,8 @@ import ca.SumAwesomeGame.model.equipment.rings.Ring;
 import ca.SumAwesomeGame.model.equipment.weapons.NullWeapon;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.game.Attack;
+import ca.SumAwesomeGame.model.game.AttackResult;
+import ca.SumAwesomeGame.model.game.AttackTarget;
 import ca.SumAwesomeGame.model.game.Game;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 
@@ -38,8 +40,20 @@ public class Player implements GameObserver {
     }
 
     private void attack() {
-        Attack attack = new Attack(game.getFill());
-        attackStrength = attack.getAttackStrength();
+        // Create attack with equipment integration
+        Attack attack = new Attack(game.getFillObject(), this, game.getEnemyManager());
+        AttackResult result = attack.getResult();
+        
+        // Apply damage to enemies based on attack targets
+        for (AttackTarget target : result.getTargets()) {
+            game.getEnemyManager().getEnemyAt(target.getTargetPosition()).ifPresent(enemy -> {
+                int damage = result.calculateDamageForTarget(target);
+                enemy.reduceHealth(damage);
+            });
+        }
+        
+        // Store attack strength for backward compatibility
+        attackStrength = result.getBaseDamage();
         justAttacked = true;
     }
 

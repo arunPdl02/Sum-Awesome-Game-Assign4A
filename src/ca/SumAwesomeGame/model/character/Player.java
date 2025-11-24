@@ -51,13 +51,13 @@ public class Player implements GameObserver {
 
     @Override
     public void update() {
-        if (game.readyToAttack){
+        if (game.isReadyToAttack()){
             attack();
             justAttacked = true;
         } else if (justAttacked) {
             resetAttack();
         }
-        if (game.startNewGame) {
+        if (game.isStartNewGame()) {
             health = 1000;
             resetAttack();
         }

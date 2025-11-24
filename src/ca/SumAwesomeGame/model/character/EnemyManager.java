@@ -36,7 +36,7 @@ public class EnemyManager implements GameObserver {
         }
         if (game.didPlayerJustAttack()){
             enemyAttacked(game.getLastUnlockedCellPosition());
-        } else if (game.startNewGame) {
+        } else if (game.isStartNewGame()) {
             createNewSetOfEnemies();
             // Reset attack timing for new match
             turnsSinceLastAttack = 0;
@@ -62,7 +62,7 @@ public class EnemyManager implements GameObserver {
     private void createNewSetOfEnemies(){
         listOfEnemies.clear();
         for (int i = 0; i < numberOfEnemies; i++) {
-            Enemy e = new Enemy(i, game.player);
+            Enemy e = new Enemy(i, game.getPlayer());
             listOfEnemies.add(e);
         }
     }

@@ -10,23 +10,23 @@ import java.util.List;
 import java.util.Optional;
 
 public class Game {
-    public long gameId;
+    private long gameId;
 
-    public GameBoard board;
+    private GameBoard board;
     private EnemyManager enemies;
 
-    public Player player = new Player();
+    private Player player = new Player();
     private final Fill fill = new Fill();
-    public Stats stats = new Stats();
+    private Stats stats = new Stats();
 
     private final int NUMBER_OF_ENEMIES = 3;
     public final int ROW_SIZE = 3;
     public final int COL_SIZE = 3;
 
-    public boolean startNewGame = false;
-    public int lastFillIncrease = 0;
+    private boolean startNewGame = false;
+    private int lastFillIncrease = 0;
     private CellPosition lastUnlockedCellPosition;
-    public boolean readyToAttack = false;
+    private boolean readyToAttack = false;
 
     private static final List<GameObserver> observers = new ArrayList<>();
 
@@ -150,6 +150,27 @@ public class Game {
 
     public boolean didPlayerJustAttack(){
         return player.justAttacked;
+    }
+
+    // Getters for observer access
+    public boolean isStartNewGame() {
+        return startNewGame;
+    }
+
+    public int getLastFillIncrease() {
+        return lastFillIncrease;
+    }
+
+    public boolean isReadyToAttack() {
+        return readyToAttack;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public GameBoard getGameBoard() {
+        return board;
     }
 
 }

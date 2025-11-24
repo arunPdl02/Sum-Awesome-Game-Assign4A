@@ -83,7 +83,7 @@ public class GameBoard implements GameObserver {
 
     @Override
     public void update() {
-        if (game.fillComplete() || game.startNewGame){
+        if (game.fillComplete() || game.isStartNewGame()){
             initializeBoard();
         }
     }

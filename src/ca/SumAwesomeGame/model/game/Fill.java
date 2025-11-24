@@ -8,10 +8,10 @@ public class Fill implements GameObserver {
 
     @Override
     public void update() {
-        if (game.startNewGame || game.didPlayerJustAttack() ){
+        if (game.isStartNewGame() || game.didPlayerJustAttack() ){
             resetFillStrength();
         } else {
-            increaseFillStrength(game.lastFillIncrease);
+            increaseFillStrength(game.getLastFillIncrease());
         }
     }
 

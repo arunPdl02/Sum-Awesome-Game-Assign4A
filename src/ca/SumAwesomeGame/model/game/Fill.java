@@ -110,4 +110,11 @@ public class Fill implements GameObserver {
     public int getCellCount() {
         return cellCount;
     }
+
+    /**
+     * Checks if the fill is complete (all 8 outer cells selected)
+     */
+    public boolean isComplete() {
+        return selectedCells.size() == 8;
+    }
 }

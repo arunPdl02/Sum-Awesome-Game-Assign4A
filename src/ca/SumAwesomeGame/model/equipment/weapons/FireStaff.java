@@ -12,7 +12,7 @@ import java.util.List;
  * Fire Staff: If fill completed with 15+ cells, hits primary target at 100% and sides at 50%
  */
 public class FireStaff implements Weapon {
-    private static final int CELL_COUNT_THRESHOLD = 15;
+    private static final int CELL_COUNT_THRESHOLD = 5; // TESTING: 5 cells (normally 15)
 
     @Override
     public String getName() {

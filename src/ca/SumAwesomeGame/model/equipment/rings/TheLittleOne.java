@@ -6,7 +6,7 @@ import ca.SumAwesomeGame.model.game.Fill;
  * The Little One: 50% damage bonus if strength <= 90
  */
 public class TheLittleOne implements Ring {
-    private static final int STRENGTH_THRESHOLD = 90;
+    private static final int STRENGTH_THRESHOLD = 200; // TESTING: 200 (normally 90)
     private static final double BONUS_MULTIPLIER = 1.5; // 50% bonus
 
     @Override

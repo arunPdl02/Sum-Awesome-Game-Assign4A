@@ -1,17 +1,34 @@
 package ca.SumAwesomeGame.UI.commands;
 
+import ca.SumAwesomeGame.UI.StatsUI;
 import ca.SumAwesomeGame.model.equipment.EquipmentFactory;
 import ca.SumAwesomeGame.model.equipment.rings.Ring;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.game.Game;
 
+/**
+ * Handles cheat commands for testing and debugging purposes.
+ * Provides commands to manipulate game state, equipment, and player stats.
+ * 
+ * @author Sum Awesome Game Team
+ */
 public class Cheat {
     private static Game game;
 
+    /**
+     * Sets the game instance for cheat commands to operate on.
+     * @param gameInstance The game instance
+     */
     public static void setGame(Game gameInstance) {
         game = gameInstance;
     }
 
+    /**
+     * Handles cheat command input and routes to appropriate handler.
+     * Supported commands: weapon, rings, lowhealth, highhealth, max, stats
+     * 
+     * @param input The full cheat command string (e.g., "cheat weapon 1")
+     */
     public static void handleCheat(String input) {
         if (game == null) {
             System.out.println("Error: Game not initialized.");
@@ -98,22 +115,36 @@ public class Cheat {
     }
 
     private static void handleLowHealthCheat() {
-        // TODO: Implement low health cheat
-        System.out.println("Low health cheat not yet implemented.");
+        game.getPlayer().setHealth(100);
+        System.out.println("Player health set to 100.");
     }
 
     private static void handleHighHealthCheat() {
-        // TODO: Implement high health cheat
-        System.out.println("High health cheat not yet implemented.");
+        game.getPlayer().setHealth(5000);
+        System.out.println("Player health set to 5000.");
     }
 
     private static void handleMaxCheat(String[] parts) {
-        // TODO: Implement max value cheat
-        System.out.println("Max value cheat not yet implemented.");
+        if (parts.length < 3) {
+            System.out.println("Usage: cheat max <number>");
+            return;
+        }
+        
+        try {
+            int max = Integer.parseInt(parts[2]);
+            if (max < 1) {
+                System.out.println("Error: max must be at least 1");
+                return;
+            }
+            
+            game.getGameBoard().setMaxValue(max);
+            System.out.println("Max cell value set to " + max + " for this match.");
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number. Must be an integer.");
+        }
     }
 
     private static void handleStatsCheat() {
-        // TODO: Implement stats display
-        System.out.println("Stats cheat not yet implemented.");
+        StatsUI.displayStats(game);
     }
 }

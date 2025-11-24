@@ -12,7 +12,7 @@ import java.util.List;
  * Sparkle Dagger: If fill completed in <20s, targets additional random enemy at 50% damage
  */
 public class SparkleDagger implements Weapon {
-    private static final int TIME_THRESHOLD_SECONDS = 20; // 20 seconds
+    private static final int TIME_THRESHOLD_SECONDS = 180; // TESTING: 180 seconds (normally 20)
 
     @Override
     public String getName() {

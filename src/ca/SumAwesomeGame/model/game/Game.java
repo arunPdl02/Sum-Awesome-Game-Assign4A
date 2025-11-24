@@ -9,9 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Main game controller class that manages the game state, board, players, enemies, and game flow.
+ * Implements the Observer pattern to notify observers of game state changes.
+ * 
+ * @author Sum Awesome Game Team
+ */
 public class Game {
-    private long gameId;
-
     private GameBoard board;
     private EnemyManager enemies;
 
@@ -30,8 +34,12 @@ public class Game {
     private static final List<GameObserver> observers = new ArrayList<>();
 
 
+    /**
+     * Constructs a new Game instance and initializes all game components.
+     * Sets up the game board, enemies, player, fill tracker, and stats.
+     * Subscribes all observers to game events.
+     */
     public Game() {
-        gameId = 0;
         board = new GameBoard(ROW_SIZE, COL_SIZE);
         enemies = new EnemyManager(NUMBER_OF_ENEMIES);
 
@@ -42,49 +50,95 @@ public class Game {
         stats.listenToGame(this);
     }
 
+    /**
+     * Gets the health values of all enemies.
+     * @return List of enemy health values
+     */
     public List<Integer> getEnemyHealth() {
         return enemies.getEnemyHealth();
     }
 
+    /**
+     * Starts a new match by resetting game state and notifying observers.
+     */
     public void startNewGame() {
-        gameId++;
         startNewGame = true;
         update();
         startNewGame = false;
     }
 
+    /**
+     * Gets the current health of the player.
+     * @return Player's current health
+     */
     public int getPlayerHealth() {
         return player.getHealth();
     }
 
+    /**
+     * Checks if the player is dead.
+     * @return true if player health is 0 or less, false otherwise
+     */
     public boolean isPlayerDead() {
         return player.isDead();
     }
 
+    /**
+     * Checks if the match has been lost (player is dead).
+     * @return true if match is lost, false otherwise
+     */
     public boolean isMatchLost() {
         return player.isDead();
     }
 
+    /**
+     * Checks if the match has been won (all enemies are dead).
+     * @return true if match is won, false otherwise
+     */
     public boolean isMatchWon() {
         return enemies.areAllDead();
     }
 
+    /**
+     * Gets the enemy manager instance.
+     * @return EnemyManager instance
+     */
     public EnemyManager getEnemyManager() {
         return enemies;
     }
 
+    /**
+     * Gets the player instance.
+     * @return Player instance
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Gets the current fill strength.
+     * @return Current fill strength value
+     */
     public int getFill() {
         return fill.getFillStrength();
     }
 
+    /**
+     * Gets the Fill object for direct access.
+     * @return Fill instance
+     */
     public Fill getFillObject() {
         return fill;
     }
 
+    /**
+     * Processes a player move by attempting to unlock a cell with the given sum.
+     * If the sum is valid, unlocks the cell, updates the board, and checks for fill completion.
+     * If the sum is invalid, triggers an enemy attack.
+     * 
+     * @param sum The sum value the player is trying to match
+     * @return true if the move was successful, false if the sum was invalid
+     */
     public boolean play(int sum) {
         Optional<Cell> validCellOptional = isSumValid(sum);
         
@@ -123,12 +177,21 @@ public class Game {
         return true; // Successful move
     }
 
+    /**
+     * Checks if the fill is complete (8 cells selected).
+     * @return true if fill is complete, false otherwise
+     */
     public boolean fillComplete() {
         // Use Fill's isComplete() method which tracks selected cells
         return fill.isComplete();
 //        return fill.getSelectedCells().size() == 3; //for testing
     }
 
+    /**
+     * Validates if a given sum can be formed by adding the center cell with any locked cell.
+     * @param sum The sum to validate
+     * @return Optional containing a valid Cell if found, empty otherwise
+     */
     public Optional<Cell> isSumValid(int sum) {
         Optional<Cell> lastMatch = Optional.empty();
 
@@ -145,21 +208,34 @@ public class Game {
                 if (cell.isCellLocked()) {
                     return lastMatch;
                 }
+
+                
             }
         }
         return lastMatch;
     }
 
+    /**
+     * Notifies all subscribed observers of game state changes.
+     */
     public void update(){
         for (GameObserver e : observers) {
             e.update();
         }
     }
 
+    /**
+     * Subscribes an observer to game state changes.
+     * @param observer The observer to subscribe
+     */
     public void subscribe(GameObserver observer){
         observers.add(observer);
     }
 
+    /**
+     * Gets a string representation of the game board.
+     * @return Formatted string of the board state
+     */
     public String getBoard() {
         StringBuilder boardString = new StringBuilder();
         for (int i = 0; i < ROW_SIZE; i++) {
@@ -171,25 +247,68 @@ public class Game {
         return boardString.toString();
     }
 
+    /**
+     * Gets the position of the last unlocked cell.
+     * @return CellPosition of the last unlocked cell
+     */
     public CellPosition getLastUnlockedCellPosition() {
         return lastUnlockedCellPosition;
     }
 
+    /**
+     * Checks if the player just performed an attack.
+     * @return true if player just attacked, false otherwise
+     */
     public boolean didPlayerJustAttack(){
         return player.justAttacked;
     }
 
-    // Getters for observer access
+    /**
+     * Checks if a new game is starting.
+     * @return true if new game is starting, false otherwise
+     */
     public boolean isStartNewGame() {
         return startNewGame;
     }
 
+    /**
+     * Gets the value of the last cell that increased the fill.
+     * @return Value of the last fill increase
+     */
+    public int getLastFillIncrease() {
+        return lastFillIncrease;
+    }
+
+    /**
+     * Checks if the player is ready to attack (fill is complete).
+     * @return true if ready to attack, false otherwise
+     */
     public boolean isReadyToAttack() {
         return readyToAttack;
     }
 
+    /**
+     * Gets the game board instance.
+     * @return GameBoard instance
+     */
     public GameBoard getGameBoard() {
         return board;
+    }
+
+    /**
+     * Gets the result of the last attack performed by the player.
+     * @return AttackResult of the last attack, or null if no attack has occurred
+     */
+    public AttackResult getLastAttackResult() {
+        return player.getLastAttackResult();
+    }
+
+    /**
+     * Gets the stats tracker instance.
+     * @return Stats instance
+     */
+    public Stats getStats() {
+        return stats;
     }
 
 }

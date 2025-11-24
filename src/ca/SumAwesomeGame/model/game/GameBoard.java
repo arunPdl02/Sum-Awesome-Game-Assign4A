@@ -8,7 +8,7 @@ public class GameBoard implements GameObserver {
     private Game game;
 
     private final int MIN_VALUE = 0;
-    private final int MAX_VALUE = 15;
+    private int maxValue = 15; // Default max value, can be changed via cheat
 
     public GameBoard(int row, int col) {
         board = new Cell[row][col];
@@ -41,6 +41,7 @@ public class GameBoard implements GameObserver {
         board[1][1].setValue(selectedCell.getValue());
 
         // Replace selected cell with random value
+        int newRandomValue = GameMath.getRandomValueBetween(MIN_VALUE, maxValue);
         int newRandomValue = GameMath.getRandomValueBetween(MIN_VALUE, MAX_VALUE);
 
         int selectedRow = selectedCell.getRow();
@@ -52,7 +53,7 @@ public class GameBoard implements GameObserver {
     private void initializeBoard() {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                int randomValue = GameMath.getRandomValueBetween(MIN_VALUE, MAX_VALUE);
+                int randomValue = GameMath.getRandomValueBetween(MIN_VALUE, maxValue);
                 CellPosition position = null;
                 switch (j) {
                     case 0 -> position = CellPosition.ONE;
@@ -63,9 +64,40 @@ public class GameBoard implements GameObserver {
             }
         }
     }
+    
+    /**
+     * Sets the maximum value for random cell generation
+     * @param max The maximum value (must be at least 1)
+     */
+    public void setMaxValue(int max) {
+        if (max < 1) {
+            // Silently ignore invalid values (model shouldn't print)
+            return;
+        }
+        this.maxValue = max;
+    }
+    
+    /**
+     * Resets the maximum value to the default (15)
+     */
+    public void resetMaxValue() {
+        this.maxValue = 15;
+    }
+    
+    /**
+     * Gets the current maximum value
+     * @return The current maximum value
+     */
+    public int getMaxValue() {
+        return maxValue;
+    }
 
     @Override
     public void update() {
+        if (game.fillComplete() || game.isStartNewGame()){
+            if (game.isStartNewGame()) {
+                resetMaxValue(); // Reset to default when new match starts
+            }
         if (game.fillComplete() || game.isStartNewGame()) {
             initializeBoard();
         }

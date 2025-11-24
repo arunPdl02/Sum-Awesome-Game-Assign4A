@@ -12,7 +12,7 @@ import java.util.List;
  * Lightning Wand: If fill completed in <10s, targets additional random enemy at 100% damage
  */
 public class LightningWand implements Weapon {
-    private static final int TIME_THRESHOLD_SECONDS = 10; // 10 seconds
+    private static final int TIME_THRESHOLD_SECONDS = 120; // TESTING: 120 seconds (normally 10)
 
     @Override
     public String getName() {

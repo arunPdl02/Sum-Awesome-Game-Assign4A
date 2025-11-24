@@ -132,4 +132,19 @@ public class Fill implements GameObserver {
         }
         return true;
     }
+
+    /**
+     * Checks if selection order is descending
+     */
+    public boolean isDescending() {
+        if (selectionOrder.size() < 2) {
+            return false;
+        }
+        for (int i = 1; i < selectionOrder.size(); i++) {
+            if (selectionOrder.get(i) >= selectionOrder.get(i - 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

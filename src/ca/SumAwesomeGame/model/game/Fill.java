@@ -65,7 +65,18 @@ public class Fill implements GameObserver {
         strength += increase;
     }
 
-    public void resetFillStrength(){
+    /**
+     * Resets all fill state for a new fill
+     */
+    public void reset() {
         strength = 0;
+        selectedCells.clear();
+        selectionOrder.clear();
+        fillStartTime = 0;
+        cellCount = 0;
+    }
+
+    public void resetFillStrength(){
+        reset();
     }
 }

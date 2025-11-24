@@ -25,9 +25,12 @@ public class MainUI implements Runnable{
         String input = "";
         startGame();
         while (!input.equals("quit")) {
-            printEnemies();
-            printBoard();
-            printPlayerStat();
+            // Don't show game state if player is dead
+            if (!game.isPlayerDead()) {
+                printEnemies();
+                printBoard();
+                printPlayerStat();
+            }
             input = InputHandler.getInput();
             String[] inputArrayWord = input.split(" ", 2);
 
@@ -38,12 +41,28 @@ public class MainUI implements Runnable{
                     case "new" -> startGame();
                     case "cheat" -> Cheat.handleCheat(input);
                     case "quit" -> System.exit(0);
-                    default -> game.play(Integer.parseInt(input));
+                    default -> {
+                        // Check if player is already dead
+                        if (game.isPlayerDead()) {
+                            System.out.println("Game Over! You lost the match. Starting new match...");
+                            startGame();
+                            continue;
+                        }
+                        
+                        boolean success = game.play(Integer.parseInt(input));
+                        if (!success) {
+                            System.out.println("Invalid sum, no cells unlocked! Enemy attacks!");
+                        }
+                        
+                        // Check if player died after the move
+                        if (game.isPlayerDead()) {
+                            System.out.println("Game Over! You lost the match. Starting new match...");
+                            startGame();
+                        }
+                    }
                 }
             } catch (NumberFormatException e){
                 System.out.println("Enter a valid input.");
-            } catch (IllegalArgumentException e){
-                System.out.println("Invalid sum, no cells unlocked!");
             } catch (UnsupportedOperationException e){
                 System.out.println(e.toString());
             }

@@ -58,13 +58,28 @@ public class Game {
         return player.getHealth();
     }
 
+    public boolean isPlayerDead() {
+        return player.isDead();
+    }
+
+    public boolean isMatchLost() {
+        return player.isDead();
+    }
+
     public int getFill() {
         return fill.getFillStrength();
     }
 
-    public void play(int sum) {
-        Cell validCell = isSumValid(sum)
-                .orElseThrow(IllegalArgumentException::new);
+    public boolean play(int sum) {
+        Optional<Cell> validCellOptional = isSumValid(sum);
+        
+        // If sum is invalid, trigger enemy attack and return false
+        if (validCellOptional.isEmpty()) {
+            enemies.attackPlayerOnFailedMove();
+            return false;
+        }
+        
+        Cell validCell = validCellOptional.get();
 
         lastUnlockedCellPosition = validCell.unlockCell()
                 .orElseThrow(UnsupportedOperationException::new);
@@ -88,6 +103,8 @@ public class Game {
             readyToAttack = false;
             update();
         }
+        
+        return true; // Successful move
     }
 
     public boolean fillComplete() {

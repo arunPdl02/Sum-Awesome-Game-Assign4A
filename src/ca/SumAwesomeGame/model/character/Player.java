@@ -37,6 +37,10 @@ public class Player implements GameObserver {
         return health;
     }
 
+    public boolean isDead() {
+        return health <= 0;
+    }
+
     private void attack() {
 //        Weapon currentWeapon = weapons.equipWeapon();
 //        List<Ring> currentRings = myRings.getActiveRings();
@@ -47,6 +51,10 @@ public class Player implements GameObserver {
 
     public void reduceHealth(int EnemyAttackStrength) {
         health -= EnemyAttackStrength;
+        // Health cannot be negative
+        if (health < 0) {
+            health = 0;
+        }
     }
 
     @Override

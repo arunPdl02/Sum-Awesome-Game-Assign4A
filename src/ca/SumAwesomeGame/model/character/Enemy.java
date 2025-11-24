@@ -28,6 +28,10 @@ public class Enemy{
 
     public void reduceHealth(int damage){
         health -= damage;
+        // Health cannot be negative
+        if (health < 0) {
+            health = 0;
+        }
     }
 
     public void attack() {

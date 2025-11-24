@@ -72,4 +72,16 @@ public class EnemyManager implements GameObserver {
                 .toList();
     }
 
+    /**
+     * Triggers an enemy attack when player makes a failed move
+     */
+    public void attackPlayerOnFailedMove() {
+        if (!listOfEnemies.isEmpty()) {
+            // Select a random enemy to attack
+            int randomIndex = GameMath.getRandomValueBetween(0, listOfEnemies.size() - 1);
+            Enemy attackingEnemy = listOfEnemies.get(randomIndex);
+            attackingEnemy.attack();
+        }
+    }
+
 }

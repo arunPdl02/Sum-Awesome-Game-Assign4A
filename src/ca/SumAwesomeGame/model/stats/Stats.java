@@ -153,4 +153,11 @@ public class Stats implements GameObserver {
     public int getWeaponsUsedCount() {
         return weaponsUsed.size();
     }
+    
+    /**
+     * Manually records a forfeit/loss when player starts a new game during an active match.
+     */
+    public void recordForfeit() {
+        gamesLost++;
+    }
 }

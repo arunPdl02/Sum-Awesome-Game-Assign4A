@@ -54,12 +54,20 @@ public class MainUI implements Runnable{
                 switch (inputArrayWord[0]){
                     case "gear" -> showGear();
                     case "stats" -> showStats();
-                    case "new" -> startGame();
+                    case "new" -> {
+                        // If match is in progress (not won, not lost), count as forfeit/loss
+                        if (!game.isMatchWon() && !game.isMatchLost()) {
+                            game.getStats().recordForfeit();
+                        }
+                        startGame();
+                        System.out.println("Started new game!");
+                    }
                     case "cheat" -> Cheat.handleCheat(input);
                     case "quit" -> System.exit(0);
                     default -> {
                         // Check if player is already dead
                         if (game.isPlayerDead()) {
+                            game.update(); // Trigger update so Stats can detect loss
                             handleMatchEnd(false); // Match lost
                             continue;
                         }
@@ -75,6 +83,8 @@ public class MainUI implements Runnable{
                         }
                         
                         // Check if match ended (win or loss)
+                        // Trigger update first so Stats can detect the transition
+                        game.update();
                         if (game.isMatchWon()) {
                             handleMatchEnd(true); // Match won
                         } else if (game.isPlayerDead()) {
@@ -335,6 +345,7 @@ public class MainUI implements Runnable{
             choice = InputHandler.getInput().toLowerCase().trim();
             if (choice.equals("new")) {
                 startGame();
+                System.out.println("Started new game!");
                 return; // Return to main loop
             } else if (choice.equals("quit")) {
                 System.exit(0);

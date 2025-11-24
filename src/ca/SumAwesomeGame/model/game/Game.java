@@ -213,6 +213,8 @@ public class Game {
                 if (cell.isCellLocked()) {
                     return lastMatch;
                 }
+
+                
             }
         }
         return lastMatch;

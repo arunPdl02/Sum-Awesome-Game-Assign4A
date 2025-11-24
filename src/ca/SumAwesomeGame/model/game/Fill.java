@@ -117,4 +117,19 @@ public class Fill implements GameObserver {
     public boolean isComplete() {
         return selectedCells.size() == 8;
     }
+
+    /**
+     * Checks if selection order is ascending
+     */
+    public boolean isAscending() {
+        if (selectionOrder.size() < 2) {
+            return false;
+        }
+        for (int i = 1; i < selectionOrder.size(); i++) {
+            if (selectionOrder.get(i) <= selectionOrder.get(i - 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

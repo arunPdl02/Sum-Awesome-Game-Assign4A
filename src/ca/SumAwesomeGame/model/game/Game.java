@@ -201,4 +201,8 @@ public class Game {
         return board;
     }
 
+    public AttackResult getLastAttackResult() {
+        return player.getLastAttackResult();
+    }
+
 }

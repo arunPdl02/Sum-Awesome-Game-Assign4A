@@ -20,7 +20,7 @@ public class RingOfTenacity implements Ring {
 
     @Override
     public boolean shouldActivate(Fill fill) {
-        return fill.getFillStrength() % 10 == 0;
+        return fill.getFillStrength() % 2 == 0; // TESTING: % 2 (normally % 10)
     }
 
     @Override

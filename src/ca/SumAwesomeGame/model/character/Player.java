@@ -14,6 +14,7 @@ public class Player implements GameObserver {
     private Weapon equippedWeapon = new NullWeapon();
     private Ring[] equippedRings = new Ring[3]; // null = empty slot
     public boolean justAttacked = false;
+    private AttackResult lastAttackResult = null; // Store last attack result for UI display
 
     private int health = 3000; // Increased for easier testing
 
@@ -22,6 +23,7 @@ public class Player implements GameObserver {
 
     public void resetAttack(){
         justAttacked = false;
+        lastAttackResult = null; // Clear attack result after display
     }
 
     public int getHealth() {
@@ -37,6 +39,9 @@ public class Player implements GameObserver {
         Attack attack = new Attack(game.getFillObject(), this, game.getEnemyManager());
         AttackResult result = attack.getResult();
         
+        // Store result for UI display
+        lastAttackResult = result;
+        
         // Apply damage to enemies based on attack targets
         for (AttackTarget target : result.getTargets()) {
             game.getEnemyManager().getEnemyAt(target.getTargetPosition()).ifPresent(enemy -> {
@@ -46,6 +51,10 @@ public class Player implements GameObserver {
         }
         
         justAttacked = true;
+    }
+    
+    public AttackResult getLastAttackResult() {
+        return lastAttackResult;
     }
 
     // ========== Equipment Management Methods ==========

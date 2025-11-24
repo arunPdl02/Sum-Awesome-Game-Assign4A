@@ -12,7 +12,7 @@ import java.util.List;
  * Stone Hammer: If fill completed with 10+ cells, hits all opponents at 80%
  */
 public class StoneHammer implements Weapon {
-    private static final int CELL_COUNT_THRESHOLD = 10;
+    private static final int CELL_COUNT_THRESHOLD = 5; // TESTING: 5 cells (normally 10)
 
     @Override
     public String getName() {

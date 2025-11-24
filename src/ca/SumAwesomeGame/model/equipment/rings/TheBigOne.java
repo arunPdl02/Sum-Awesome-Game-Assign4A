@@ -6,7 +6,7 @@ import ca.SumAwesomeGame.model.game.Fill;
  * The Big One: 50% damage bonus if strength >= 160
  */
 public class TheBigOne implements Ring {
-    private static final int STRENGTH_THRESHOLD = 160;
+    private static final int STRENGTH_THRESHOLD = 50; // TESTING: 50 (normally 160)
     private static final double BONUS_MULTIPLIER = 1.5; // 50% bonus
 
     @Override

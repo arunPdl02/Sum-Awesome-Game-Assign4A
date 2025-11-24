@@ -69,8 +69,13 @@ public class Game {
         lastUnlockedCellPosition = validCell.unlockCell()
                 .orElseThrow(UnsupportedOperationException::new);
 
-        // Store the cell value to add to fill strength (before replacing cells)
+        // Store the cell value for backward compatibility with observers
         lastFillIncrease = validCell.getValue();
+        
+        // Add cell to fill (tracks position, value, order, time, count)
+        if (lastUnlockedCellPosition != null) {
+            fill.addCell(lastUnlockedCellPosition, validCell.getValue());
+        }
         
         // Replace cells after successful move: center = selected cell value, selected = random
         board.replaceCellsAfterMove(validCell);
@@ -86,16 +91,9 @@ public class Game {
     }
 
     public boolean fillComplete() {
-        int count = 0;
-        for (int i = 0; i < ROW_SIZE; i++) {
-            for (int j = 0; j < COL_SIZE; j++) {
-                if (board.cellUnlocked(i, j)) {
-                    count++;
-                }
-            }
-        }
-        return count == 8;
-//        return count == 3; //for testing
+        // Use Fill's isComplete() method which tracks selected cells
+        return fill.isComplete();
+//        return fill.getSelectedCells().size() == 3; //for testing
     }
 
     public Optional<Cell> isSumValid(int sum) {

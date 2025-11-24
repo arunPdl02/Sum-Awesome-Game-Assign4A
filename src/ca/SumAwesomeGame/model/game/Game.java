@@ -69,8 +69,12 @@ public class Game {
         lastUnlockedCellPosition = validCell.unlockCell()
                 .orElseThrow(UnsupportedOperationException::new);
 
-        // Store the cell value to add to fill strength
+        // Store the cell value to add to fill strength (before replacing cells)
         lastFillIncrease = validCell.getValue();
+        
+        // Replace cells after successful move: center = selected cell value, selected = random
+        board.replaceCellsAfterMove(validCell);
+        
         readyToAttack = fillComplete();
 
         update();

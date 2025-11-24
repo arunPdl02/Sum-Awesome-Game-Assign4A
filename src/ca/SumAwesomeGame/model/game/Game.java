@@ -85,15 +85,15 @@ public class Game {
         return fill;
     }
 
-    public boolean play(int sum) {
+    public void play(int sum) {
         Optional<Cell> validCellOptional = isSumValid(sum);
-        
-        // If sum is invalid, trigger enemy attack and return false
+
+        // If sum is invalid, trigger enemy attack and throw illegal arugment exception
         if (validCellOptional.isEmpty()) {
             enemies.attackPlayerOnFailedMove();
-            return false;
+            throw new IllegalArgumentException();
         }
-        
+
         Cell validCell = validCellOptional.get();
 
         lastUnlockedCellPosition = validCell.unlockCell()
@@ -101,26 +101,23 @@ public class Game {
 
 
         // Add cell to fill (tracks position, value, order, time, count, and coordinates)
-        if (lastUnlockedCellPosition != null) {
-            fill.addCell(lastUnlockedCellPosition,
-                    validCell.getValue(),
-                    validCell.getRow(),
-                    validCell.getCol());
-        }
-        
+        fill.addCell(lastUnlockedCellPosition,
+                validCell.getValue(),
+                validCell.getRow(),
+                validCell.getCol());
+
         // Replace cells after successful move: center = selected cell value, selected = random
         board.replaceCellsAfterMove(validCell);
-        
+
         readyToAttack = fillComplete();
 
         update();
 
-        if(didPlayerJustAttack()){
+        if (didPlayerJustAttack()) {
             readyToAttack = false;
             update();
         }
-        
-        return true; // Successful move
+
     }
 
     public boolean fillComplete() {
@@ -150,13 +147,13 @@ public class Game {
         return lastMatch;
     }
 
-    public void update(){
+    public void update() {
         for (GameObserver e : observers) {
             e.update();
         }
     }
 
-    public void subscribe(GameObserver observer){
+    public void subscribe(GameObserver observer) {
         observers.add(observer);
     }
 
@@ -175,7 +172,7 @@ public class Game {
         return lastUnlockedCellPosition;
     }
 
-    public boolean didPlayerJustAttack(){
+    public boolean didPlayerJustAttack() {
         return player.justAttacked;
     }
 
@@ -192,4 +189,7 @@ public class Game {
         return board;
     }
 
+    public void activateEnemyHealthCheat() {
+
+    }
 }

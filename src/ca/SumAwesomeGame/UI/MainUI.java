@@ -51,11 +51,8 @@ public class MainUI implements Runnable{
                             continue;
                         }
                         
-                        boolean success = game.play(Integer.parseInt(input));
-                        if (!success) {
-                            System.out.println("Invalid sum, no cells unlocked! Enemy attacks!");
-                        }
-                        
+                        game.play(Integer.parseInt(input));
+
                         // Check if match ended (win or loss)
                         if (game.isMatchWon()) {
                             handleMatchEnd(true); // Match won
@@ -68,6 +65,8 @@ public class MainUI implements Runnable{
                 System.out.println("Enter a valid input.");
             } catch (UnsupportedOperationException e){
                 System.out.println(e.toString());
+            } catch (IllegalArgumentException e){
+                System.out.println("Invalid sum, no cells unlocked! Enemy attacks!");
             }
 
         }

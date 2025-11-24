@@ -99,7 +99,7 @@ public class Cheat {
 
     private static void handleLowHealthCheat() {
         // TODO: Implement low health cheat
-        System.out.println("Low health cheat not yet implemented.");
+        game.activateEnemyHealthCheat();
     }
 
     private static void handleHighHealthCheat() {

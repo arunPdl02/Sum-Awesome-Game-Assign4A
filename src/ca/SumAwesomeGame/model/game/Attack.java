@@ -66,26 +66,8 @@ public class Attack {
         this.result = new AttackResult(baseDamage, totalBonusMultiplier, targets, equipmentActivations);
     }
 
-    /**
-     * Legacy constructor for backward compatibility (not recommended)
-     * @deprecated Use Attack(Fill, Player, EnemyManager) instead
-     */
-    @Deprecated
-    public Attack(int fill) {
-        // This is a legacy constructor - creates a minimal attack result
-        this.result = new AttackResult(fill, 1.0, new ArrayList<>(), new HashMap<>());
-    }
-
     public AttackResult getResult() {
         return result;
     }
 
-    /**
-     * Legacy method for backward compatibility
-     * @deprecated Use getResult() instead
-     */
-    @Deprecated
-    public int getAttackStrength() {
-        return result.getBaseDamage();
-    }
 }

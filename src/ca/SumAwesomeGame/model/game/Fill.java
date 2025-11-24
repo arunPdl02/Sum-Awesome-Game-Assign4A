@@ -35,6 +35,28 @@ public class Fill implements GameObserver {
         game.subscribe(this);
     }
 
+    /**
+     * Adds a cell to the fill and updates all tracking information
+     */
+    public void addCell(CellPosition position, int value) {
+        // Start timer if this is the first cell
+        if (selectedCells.isEmpty()) {
+            fillStartTime = System.currentTimeMillis();
+        }
+        
+        // Add to selected cells set
+        selectedCells.add(position);
+        
+        // Add to selection order
+        selectionOrder.add(value);
+        
+        // Increment cell count (includes re-selections)
+        cellCount++;
+        
+        // Update strength
+        strength += value;
+    }
+
     public int getFillStrength(){
         return strength;
     }

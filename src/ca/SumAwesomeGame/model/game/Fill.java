@@ -2,9 +2,23 @@ package ca.SumAwesomeGame.model.game;
 
 import ca.SumAwesomeGame.model.observer.GameObserver;
 
+import java.util.*;
+
 public class Fill implements GameObserver {
     private Game game;
     private int strength = 0;
+    
+    // Track selected cells
+    private Set<CellPosition> selectedCells = new HashSet<>();
+    
+    // Track selection order (values in order they were selected)
+    private List<Integer> selectionOrder = new ArrayList<>();
+    
+    // Track time when fill started
+    private long fillStartTime = 0;
+    
+    // Track total cell count (including re-selections)
+    private int cellCount = 0;
 
     @Override
     public void update() {

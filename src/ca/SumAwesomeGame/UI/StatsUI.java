@@ -66,6 +66,13 @@ public class StatsUI implements GameObserver {
         Weapon weapon = stats.lastUsedWeapon;
         List<Ring> rings = stats.lastUsedRings;
         List<AttackTarget> targets = result.getTargets();
+        int damageAfterRingBonus = (int) result.getTotalBonusMultiplier() * baseDamage;
+        Position primaryTarget = targets.getFirst().getTargetPosition();
+        Optional<Enemy> enemy = game.getEnemyManager().getEnemyAt(primaryTarget);
+
+        if (enemy.isEmpty()){
+            return;
+        }
 
         if (rings.isEmpty()) {
             System.out.println("Fill complete! Strength is " + baseDamage);
@@ -74,15 +81,15 @@ public class StatsUI implements GameObserver {
                 System.out.println(ring.getName() + " adds " + ring.getAbility());
             }
         }
-        int damageAfterRingBonus = (int) result.getTotalBonusMultiplier() * baseDamage;
-        Position primaryTarget = targets.getFirst().getTargetPosition();
-        Optional<Enemy> enemy = game.getEnemyManager().getEnemyAt(primaryTarget);
-        int damage = result.calculateDamageForTarget(targets.getFirst());
+        var damage = result.calculateDamageForTarget(targets.getFirst());
 
-        if (enemy.isEmpty()) {
-            System.out.println("Misses " + primaryTarget + " character.");
-        } else {
+        if (enemy.get().didEnemyJustGetHit()) {
             System.out.println("Hit " + primaryTarget + " character for " + damageAfterRingBonus + " damage.");
+        }
+        if (enemy.get().didEnemyJustDie()) {
+            System.out.println("Kills "+ primaryTarget +" character!");
+        } else {
+            System.out.println("Misses " + primaryTarget + " character.");
         }
 
         if (!(weapon instanceof NullWeapon)) {
@@ -90,7 +97,11 @@ public class StatsUI implements GameObserver {
                 Position position = targets.get(i).getTargetPosition();
                 System.out.println(weapon.getName() + " targets " + position);
                 enemy = game.getEnemyManager().getEnemyAt(position);
-                if (enemy.isEmpty()) {
+                if (enemy.get().didEnemyJustGetHit()) {
+                    System.out.println("Killed " + position + " character!");
+                }
+                if (enemy.get().didEnemyJustDie())
+                {
                     System.out.println("Missed " + position + " character.");
                 } else {
                     damage = result.calculateDamageForTarget(targets.get(i));

@@ -98,9 +98,6 @@ public class EnemyManager implements GameObserver {
             return Optional.empty();
         }
         Enemy enemy = listOfEnemies.get(index);
-        if (enemy.getHealth() <= 0) {
-            return Optional.empty();
-        }
         return Optional.of(enemy);
     }
 

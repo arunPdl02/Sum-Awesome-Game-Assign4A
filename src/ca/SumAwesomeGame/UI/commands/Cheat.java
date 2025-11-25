@@ -14,6 +14,7 @@ import ca.SumAwesomeGame.model.game.Game;
  */
 public class Cheat {
     private static Game game;
+    private static final int LOW_ENEMY_CHEAT_HEALTH = 1;
 
     /**
      * Sets the game instance for cheat commands to operate on.
@@ -119,8 +120,8 @@ public class Cheat {
      * This setting persists only until the end of the match.
      */
     private static void handleLowHealthCheat() {
-        game.getEnemyManager().setAllEnemyHealth(50);
-        System.out.println("All enemies health set to 50 (very low - ~1 hit to kill).");
+        game.getEnemyManager().setAllEnemyHealth(LOW_ENEMY_CHEAT_HEALTH);
+        System.out.println("All enemies health set to "+ LOW_ENEMY_CHEAT_HEALTH + " (very low - ~1 hit to kill).");
     }
 
     /**

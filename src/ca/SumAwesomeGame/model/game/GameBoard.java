@@ -43,36 +43,14 @@ public class GameBoard implements GameObserver {
      * - Selected cell gets a new random value within current max value range
      */
     public void replaceCellsAfterMove(Cell selectedCell) {
-        int[] coordinates = findCellCoordinates(selectedCell);
-        int selectedRow = coordinates[0];
-        int selectedCol = coordinates[1];
-        
-        if (selectedRow == -1 || selectedCol == -1) {
-            return; // Cell not found, cannot proceed
-        }
-        
-        int selectedCellValue = selectedCell.getValue();
-        board[1][1].setValue(selectedCellValue);
-        
+
+        board[1][1].setValue(selectedCell.getValue());
+
         // Generate new random value respecting current max value (may be modified by cheat)
         int newRandomValue = GameMath.getRandomValueBetween(MIN_VALUE, maxValue);
+        int selectedRow = selectedCell.getRow();
+        int selectedCol = selectedCell.getCol();
         board[selectedRow][selectedCol].setValue(newRandomValue);
-    }
-    
-    /**
-     * Finds the row and column coordinates of a cell in the board
-     * @param cell The cell to find
-     * @return int array [row, col], or [-1, -1] if not found
-     */
-    public int[] findCellCoordinates(Cell cell) {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] == cell) {
-                    return new int[]{i, j};
-                }
-            }
-        }
-        return new int[]{-1, -1};
     }
 
     private void initializeBoard() {

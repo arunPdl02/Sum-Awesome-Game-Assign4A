@@ -8,7 +8,6 @@ import ca.SumAwesomeGame.model.game.AttackResult;
 import ca.SumAwesomeGame.model.game.AttackTarget;
 import ca.SumAwesomeGame.model.game.Game;
 import ca.SumAwesomeGame.model.game.Position;
-import ca.SumAwesomeGame.model.util.GameMath;
 
 import java.util.List;
 import java.util.Map;
@@ -17,12 +16,12 @@ import java.util.Map;
  * Main user interface controller for the game.
  * Handles user input, displays game state, and manages the game loop.
  * Implements Runnable to run as a separate thread if needed.
- * 
+ *
  * @author Sum Awesome Game Team
  */
-public class MainUI implements Runnable{
+public class MainUI implements Runnable {
 
-    private StatsUI statsUI = new StatsUI();
+    private StatsUI statsUI;
     private Game game;
 
     /**
@@ -31,6 +30,7 @@ public class MainUI implements Runnable{
      */
     public MainUI() {
         game = new Game();
+        statsUI = new StatsUI(game.getStats());
 
         statsUI.listenToGame(game);
         Cheat.setGame(game); // Give Cheat access to game instance
@@ -50,8 +50,8 @@ public class MainUI implements Runnable{
             input = InputHandler.getInput();
             String[] inputArrayWord = input.split(" ", 2);
 
-            try{
-                switch (inputArrayWord[0]){
+            try {
+                switch (inputArrayWord[0]) {
                     case "gear" -> showGear();
                     case "stats" -> showStats();
                     case "new" -> {
@@ -71,17 +71,17 @@ public class MainUI implements Runnable{
                             handleMatchEnd(false); // Match lost
                             continue;
                         }
-                        
+
                         boolean success = game.play(Integer.parseInt(input));
                         if (!success) {
                             System.out.println("Invalid sum, no cells unlocked! Enemy attacks!");
                         }
-                        
+
                         // Display attack output if player just attacked
                         if (game.didPlayerJustAttack()) {
                             displayAttackOutput();
                         }
-                        
+
                         // Check if match ended (win or loss)
                         // Trigger update first so Stats can detect the transition
                         game.update();
@@ -92,9 +92,9 @@ public class MainUI implements Runnable{
                         }
                     }
                 }
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
                 System.out.println("Enter a valid input.");
-            } catch (UnsupportedOperationException e){
+            } catch (UnsupportedOperationException e) {
                 System.out.println(e.toString());
             }
 
@@ -107,7 +107,7 @@ public class MainUI implements Runnable{
      */
     private void showGear() {
         System.out.println("\n=== Current Equipment ===");
-        
+
         // Show weapon
         Weapon weapon = game.getPlayer().getEquippedWeapon();
         System.out.println("Weapon: " + weapon.getName());
@@ -115,30 +115,26 @@ public class MainUI implements Runnable{
             // Get ability description from weapon (if available)
             System.out.println("  (Weapon ability activates based on fill properties)");
         }
-        
+
         // Show rings
         System.out.println("\nRings:");
-        Ring[] rings = game.getPlayer().getEquippedRings();
-        boolean hasRings = false;
-        for (int i = 0; i < rings.length; i++) {
-            if (rings[i] != null) {
-                hasRings = true;
-                System.out.println("  Slot " + (i + 1) + ": " + rings[i].getName());
-                System.out.println("    Ability: " + rings[i].getAbility());
+        List<Ring> rings = game.getPlayer().getEquippedRings();
+        if (rings.isEmpty()){
+            System.out.println("  (No rings equipped)");
+        } else {
+            for(Ring ring: rings){
+                System.out.println(ring.getName() + " with " + ring.getAbility());
             }
         }
-        if (!hasRings) {
-            System.out.println("  (No rings equipped)");
-        }
-        
+
         System.out.println("========================\n");
     }
-    
+
     /**
      * Displays game statistics.
      */
-    private void showStats(){
-        StatsUI.displayStats(game);
+    private void showStats() {
+        statsUI.displayStats(game);
     }
 
     /**
@@ -154,7 +150,7 @@ public class MainUI implements Runnable{
      */
     private void printEnemies() {
         List<Integer> enemyHealth = game.getEnemyHealth();
-        for (Integer i: enemyHealth){
+        for (Integer i : enemyHealth) {
             System.out.printf("%-10s", " [" + i + "] ");
         }
         System.out.print("\n");
@@ -183,23 +179,23 @@ public class MainUI implements Runnable{
         if (result == null) {
             return;
         }
-        
+
         // Display fill complete message
         System.out.println("Fill complete! Strength is " + result.getBaseDamage() + ".");
-        
+
         // Display ring activations
         Map<String, Boolean> activations = result.getEquipmentActivations();
         for (Map.Entry<String, Boolean> entry : activations.entrySet()) {
             String equipmentName = entry.getKey();
             boolean activated = entry.getValue();
-            
+
             // Skip weapon for now (will handle separately)
             if (equipmentName.equals("None")) {
                 continue;
             }
-            
+
             // Check if it's a ring (not a weapon)
-            Ring[] rings = game.getPlayer().getEquippedRings();
+            List<Ring> rings = game.getPlayer().getEquippedRings();
             for (Ring ring : rings) {
                 if (ring != null && ring.getName().equals(equipmentName)) {
                     if (activated) {
@@ -212,30 +208,30 @@ public class MainUI implements Runnable{
                 }
             }
         }
-        
+
         // Get weapon name for targeting messages
         Weapon weapon = game.getPlayer().getEquippedWeapon();
         String weaponName = weapon.getName();
-        
+
         // Display attack results for each target
         List<AttackTarget> targets = result.getTargets();
         for (AttackTarget target : targets) {
             Position pos = target.getTargetPosition();
             String positionName = pos.name().toLowerCase();
-            
+
             int damage = result.calculateDamageForTarget(target);
-            
+
             // Check if enemy is alive (getEnemyAt filters out dead enemies)
             var enemyOpt = game.getEnemyManager().getEnemyAt(pos);
-            
+
             if (enemyOpt.isEmpty()) {
                 // Enemy is dead - could be already dead or just killed
                 // Check all enemies to see current health
                 var allEnemies = game.getEnemyManager().getAllEnemies();
                 var enemyAtPos = allEnemies.stream()
-                    .filter(e -> e.getLocation() == pos.ordinal())
-                    .findFirst();
-                
+                        .filter(e -> e.getLocation() == pos.ordinal())
+                        .findFirst();
+
                 if (enemyAtPos.isPresent() && enemyAtPos.get().getHealth() == 0 && damage > 0) {
                     // Enemy health is 0 and damage was applied - it was just killed
                     if (target.isPrimary()) {
@@ -259,14 +255,14 @@ public class MainUI implements Runnable{
                 // Enemy is alive - show hit
                 var enemy = enemyOpt.get();
                 int currentHealth = enemy.getHealth();
-                
+
                 if (target.isPrimary()) {
                     System.out.println("Hit " + positionName + " character for " + damage + " damage.");
                 } else {
                     System.out.println(weaponName + " targets " + positionName + " character.");
                     System.out.println("Hit " + positionName + " character for " + damage + " damage.");
                 }
-                
+
                 // Check if enemy was killed (health is 0 after attack)
                 if (currentHealth == 0) {
                     System.out.println("Kills " + positionName + " character!");
@@ -274,7 +270,7 @@ public class MainUI implements Runnable{
             }
         }
     }
-    
+
     /**
      * Helper method to get ring bonus multiplier for display
      */
@@ -282,7 +278,7 @@ public class MainUI implements Runnable{
         // We need to recalculate the bonus, but we can use the fill strength
         // For now, we'll use a simple approach: check the ring's ability string
         String ability = ring.getAbility();
-        
+
         // Parse percentage from ability string
         if (ability.contains("10%")) {
             return 1.1;
@@ -299,14 +295,14 @@ public class MainUI implements Runnable{
     /**
      * Handles match end (win or loss) and prompts user for next action.
      * If match is won, awards random equipment to the player.
-     * 
+     *
      * @param won true if match was won, false if match was lost
      */
     private void handleMatchEnd(boolean won) {
         if (won) {
             System.out.println("\n=== MATCH WON! ===");
             System.out.println("All enemies defeated!");
-            
+
             // Give random equipment reward
             Object reward = EquipmentFactory.getRandomEquipment();
             if (reward instanceof Weapon) {
@@ -315,31 +311,22 @@ public class MainUI implements Runnable{
                 System.out.println("Reward: " + weapon.getName() + " equipped!");
             } else if (reward instanceof Ring) {
                 Ring ring = (Ring) reward;
-                int emptySlot = game.getPlayer().getFirstEmptyRingSlot();
-                if (emptySlot != -1) {
-                    game.getPlayer().equipRing(ring, emptySlot);
-                    System.out.println("Reward: " + ring.getName() + " equipped in slot " + (emptySlot + 1) + "!");
-                } else {
-                    // All ring slots full - replace a random slot
-                    int randomSlot = GameMath.getRandomValueBetween(0, 2);
-                    Ring oldRing = game.getPlayer().getEquippedRings()[randomSlot];
-                    game.getPlayer().equipRing(ring, randomSlot);
-                    if (oldRing != null) {
-                        System.out.println("Reward: " + ring.getName() + " equipped in slot " + (randomSlot + 1) + " (replaced " + oldRing.getName() + ")!");
-                    } else {
-                        System.out.println("Reward: " + ring.getName() + " equipped in slot " + (randomSlot + 1) + "!");
-                    }
+                if (!game.getPlayer().canPlayerEquipMoreRings()) {
+                    int ringIndexToReplace = InputHandler.getRingInput(game.getPlayer().getEquippedRings());
+                    game.getPlayer().removeRingAtIndex(ringIndexToReplace);
                 }
+                game.getPlayer().addRing(ring);
+                System.out.println("Reward: " + ring.getName() + " equipped!");
             }
         } else {
             System.out.println("\n=== MATCH LOST ===");
             System.out.println("Your character was defeated!");
         }
-        
+
         System.out.println("\nWhat would you like to do?");
         System.out.println("  'new' - Start a new match");
         System.out.println("  'quit' - Exit the game");
-        
+
         String choice = "";
         while (!choice.equals("new") && !choice.equals("quit")) {
             choice = InputHandler.getInput().toLowerCase().trim();

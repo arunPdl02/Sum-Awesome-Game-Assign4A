@@ -20,7 +20,7 @@ public class TheTwoRing implements Ring {
 
     @Override
     public String getAbility() {
-        return "1000% damage bonus if strength is a power of 2";
+        return "1000% Damage Bonus";
     }
 
     @Override

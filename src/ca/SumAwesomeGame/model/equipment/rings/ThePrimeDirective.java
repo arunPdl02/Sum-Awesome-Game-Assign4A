@@ -20,7 +20,7 @@ public class ThePrimeDirective implements Ring {
 
     @Override
     public String getAbility() {
-        return "100% damage bonus if strength is prime";
+        return "100% Damage Bonus.";
     }
 
     @Override

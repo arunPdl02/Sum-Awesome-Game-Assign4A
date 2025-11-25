@@ -19,7 +19,7 @@ public class RingOfMeh implements Ring {
 
     @Override
     public String getAbility() {
-        return "10% damage bonus if strength % 5 == 0";
+        return "10% Damage Bonus";
     }
 
     @Override
@@ -32,4 +32,3 @@ public class RingOfMeh implements Ring {
         return shouldActivate(fill) ? BONUS_MULTIPLIER : 1.0;
     }
 }
-

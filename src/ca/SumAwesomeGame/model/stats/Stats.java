@@ -1,7 +1,10 @@
 package ca.SumAwesomeGame.model.stats;
 
+import ca.SumAwesomeGame.model.character.Player;
+import ca.SumAwesomeGame.model.equipment.rings.Ring;
 import ca.SumAwesomeGame.model.equipment.weapons.NullWeapon;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
+import ca.SumAwesomeGame.model.game.AttackResult;
 import ca.SumAwesomeGame.model.game.Game;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 
@@ -20,7 +23,11 @@ public class Stats implements GameObserver {
     private int damageReceived;
     private int totalNumberOfFills;
     private List<Weapon> weaponsUsed = new ArrayList<>();
+    public Weapon lastUsedWeapon = new NullWeapon();
+    private Ring[] lastEquippedRings = new Ring[3];
     private Game game;
+    public AttackResult lastAttackResult;
+    public List<Ring> lastUsedRings;
     
     // Track previous fill state to detect when fill completes
     private boolean previousFillComplete = false;
@@ -82,8 +89,11 @@ public class Stats implements GameObserver {
         
         // Track weapons used (when player just attacked)
         if (game.didPlayerJustAttack()) {
-            Weapon equippedWeapon = game.getPlayer().getEquippedWeapon();
-            addUsedWeapon(equippedWeapon);
+            Player player = game.getPlayer();
+            lastAttackResult = player.getLastAttackResult();
+            lastUsedWeapon = player.getEquippedWeapon();
+            lastUsedRings = player.getEquippedRings();
+            addUsedWeapon(lastUsedWeapon);
         }
         
         // Reset tracking when new game starts

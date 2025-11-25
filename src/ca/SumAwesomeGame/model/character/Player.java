@@ -9,17 +9,20 @@ import ca.SumAwesomeGame.model.game.AttackTarget;
 import ca.SumAwesomeGame.model.game.Game;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents the player character in the game.
  * Manages player health, equipment (weapon and rings), and attack behavior.
  * Implements GameObserver to respond to game state changes.
- * 
+ *
  * @author Sum Awesome Game Team
  */
 public class Player implements GameObserver {
     private Game game;
     private Weapon equippedWeapon = new NullWeapon();
-    private Ring[] equippedRings = new Ring[3]; // null = empty slot
+    private List<Ring> equippedRings = new ArrayList<>(); // null = empty slot
     public boolean justAttacked = false;
     private AttackResult lastAttackResult = null; // Store last attack result for UI display
 
@@ -34,13 +37,14 @@ public class Player implements GameObserver {
     /**
      * Resets the attack state after an attack has been processed.
      */
-    public void resetAttack(){
+    public void resetAttack() {
         justAttacked = false;
         lastAttackResult = null; // Clear attack result after display
     }
 
     /**
      * Gets the current health of the player.
+     *
      * @return Current health value
      */
     public int getHealth() {
@@ -48,20 +52,8 @@ public class Player implements GameObserver {
     }
 
     /**
-     * Sets the player's health to a new value.
-     * Health cannot be negative (will be set to 0 if negative value provided).
-     * @param newHealth The new health value
-     */
-    public void setHealth(int newHealth) {
-        if (newHealth < 0) {
-            health = 0;
-        } else {
-            health = newHealth;
-        }
-    }
-
-    /**
      * Checks if the player is dead (health <= 0).
+     *
      * @return true if player is dead, false otherwise
      */
     public boolean isDead() {
@@ -72,10 +64,10 @@ public class Player implements GameObserver {
         // Create attack with equipment integration
         Attack attack = new Attack(game.getFillObject(), this, game.getEnemyManager());
         AttackResult result = attack.getResult();
-        
+
         // Store result for UI display
         lastAttackResult = result;
-        
+
         // Apply damage to enemies based on attack targets
         for (AttackTarget target : result.getTargets()) {
             game.getEnemyManager().getEnemyAt(target.getTargetPosition()).ifPresent(enemy -> {
@@ -83,12 +75,13 @@ public class Player implements GameObserver {
                 enemy.reduceHealth(damage);
             });
         }
-        
+
         justAttacked = true;
     }
 
     /**
      * Gets the result of the last attack performed by the player.
+     *
      * @return AttackResult of the last attack, or null if no attack has occurred
      */
     public AttackResult getLastAttackResult() {
@@ -96,9 +89,10 @@ public class Player implements GameObserver {
     }
 
     // ========== Equipment Management Methods ==========
-    
+
     /**
      * Equips a weapon to the player.
+     *
      * @param weapon The weapon to equip
      */
     public void equipWeapon(Weapon weapon) {
@@ -114,6 +108,7 @@ public class Player implements GameObserver {
 
     /**
      * Equips a ring to a specific slot (0, 1, or 2).
+     *
      * @param ring The ring to equip
      * @param slot The slot index (0, 1, or 2)
      * @throws IllegalArgumentException if slot is out of range
@@ -122,23 +117,12 @@ public class Player implements GameObserver {
         if (slot < 0 || slot >= 3) {
             throw new IllegalArgumentException("Ring slot must be 0, 1, or 2");
         }
-        equippedRings[slot] = ring;
-    }
-
-    /**
-     * Unequips a ring from a specific slot.
-     * @param slot The slot index (0, 1, or 2)
-     * @throws IllegalArgumentException if slot is out of range
-     */
-    public void unequipRing(int slot) {
-        if (slot < 0 || slot >= 3) {
-            throw new IllegalArgumentException("Ring slot must be 0, 1, or 2");
-        }
-        equippedRings[slot] = null;
+        equippedRings.add(ring);
     }
 
     /**
      * Gets the currently equipped weapon.
+     *
      * @return The equipped weapon (may be NullWeapon if none equipped)
      */
     public Weapon getEquippedWeapon() {
@@ -147,41 +131,26 @@ public class Player implements GameObserver {
 
     /**
      * Gets a copy of the array of equipped rings.
-     * @return Clone of the equipped rings array
+     *
+     * @return List of the equipped rings array
      */
-    public Ring[] getEquippedRings() {
-        return equippedRings.clone(); // Return copy to prevent external modification
-    }
-
-    /**
-     * Checks if there is at least one empty ring slot.
-     * @return true if there is an empty slot, false if all slots are full
-     */
-    public boolean hasEmptyRingSlot() {
-        for (Ring ring : equippedRings) {
-            if (ring == null) {
-                return true;
-            }
-        }
-        return false;
+    public List<Ring> getEquippedRings() {
+        return equippedRings; // Return copy to prevent external modification
     }
 
     /**
      * Gets the index of the first empty ring slot.
+     *
      * @return Index of first empty slot (0, 1, or 2), or -1 if all slots are full
      */
-    public int getFirstEmptyRingSlot() {
-        for (int i = 0; i < 3; i++) {
-            if (equippedRings[i] == null) {
-                return i;
-            }
-        }
-        return -1; // All slots full
+    public boolean canPlayerEquipMoreRings() {
+        return equippedRings.size() < 3;
     }
 
     /**
      * Reduces the player's health by the specified amount.
      * Health cannot go below 0. Also records damage in the stats tracker.
+     *
      * @param EnemyAttackStrength The amount of damage to take
      */
     public void reduceHealth(int EnemyAttackStrength) {
@@ -202,7 +171,7 @@ public class Player implements GameObserver {
      */
     @Override
     public void update() {
-        if (game.isReadyToAttack()){
+        if (game.isReadyToAttack()) {
             attack(); // Sets justAttacked = true internally
         } else if (justAttacked) {
             resetAttack();
@@ -215,11 +184,22 @@ public class Player implements GameObserver {
 
     /**
      * Subscribes the player to game state changes.
+     *
      * @param game The game instance to observe
      */
     @Override
     public void listenToGame(Game game) {
         this.game = game;
         game.subscribe(this);
+    }
+
+    public void removeRingAtIndex(int index) {
+        if (index < 3) {
+            equippedRings.remove(index);
+        }
+    }
+
+    public void addRing(Ring ring) {
+        equippedRings.add(ring);
     }
 }

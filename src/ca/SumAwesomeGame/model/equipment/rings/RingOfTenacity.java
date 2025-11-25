@@ -19,7 +19,7 @@ public class RingOfTenacity implements Ring {
 
     @Override
     public String getAbility() {
-        return "50% damage bonus if strength % 10 == 0";
+        return "50% Damage Bonus";
     }
 
     @Override

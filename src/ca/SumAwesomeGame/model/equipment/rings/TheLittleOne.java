@@ -20,7 +20,7 @@ public class TheLittleOne implements Ring {
 
     @Override
     public String getAbility() {
-        return "50% damage bonus if strength <= 90";
+        return "50% Damage Bonus";
     }
 
     @Override

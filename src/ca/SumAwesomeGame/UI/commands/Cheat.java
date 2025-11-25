@@ -103,9 +103,7 @@ public class Cheat {
     }
 
     private static void equipRingInSlot(int ringId, int slot) {
-        if (ringId == 0) {
-            game.getPlayer().unequipRing(slot);
-        } else {
+        if (ringId != 0) {
             Ring ring = EquipmentFactory.createRing(ringId);
             if (ring == null) {
                 System.out.println("Warning: Invalid ring ID " + ringId + " for slot " + (slot + 1));

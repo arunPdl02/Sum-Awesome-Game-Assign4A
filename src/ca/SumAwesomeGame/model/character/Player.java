@@ -63,7 +63,6 @@ public class Player implements GameObserver {
 
     private void attack() {
         // Create attack with equipment integration
-        equippedWeapon = new WeaponsManager().getActiveWeapon(game.getFillObject());
         Attack attack = new Attack(game.getFillObject(), this, game.getEnemyManager());
         AttackResult result = attack.getResult();
 
@@ -125,7 +124,7 @@ public class Player implements GameObserver {
     /**
      * Gets the currently equipped weapon.
      *
-     * @return The equipped weapon (may be NullWeapon if none equipped)
+     * @return The equipped weapon (maybe NullWeapon if none equipped)
      */
     public Weapon getEquippedWeapon() {
         return equippedWeapon;
@@ -174,6 +173,9 @@ public class Player implements GameObserver {
     @Override
     public void update() {
         if (game.isReadyToAttack()) {
+            if (!game.weaponCheatActivated){
+                equippedWeapon = new WeaponsManager().getActiveWeapon(game.getFillObject());
+            }
             attack(); // Sets justAttacked = true internally
         } else if (justAttacked) {
             resetAttack();

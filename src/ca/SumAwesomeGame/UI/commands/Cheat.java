@@ -75,6 +75,7 @@ public class Cheat {
                     System.out.println("Equipped: " + weapon.getName());
                 }
             }
+            game.weaponCheatActivated = true;
         } catch (NumberFormatException e) {
             System.out.println("Invalid weapon ID. Must be a number.");
         }

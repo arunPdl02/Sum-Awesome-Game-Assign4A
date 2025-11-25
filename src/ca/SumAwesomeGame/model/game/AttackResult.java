@@ -15,14 +15,14 @@ public class AttackResult {
     private final int baseDamage;
     private final double totalBonusMultiplier;
     private final List<AttackTarget> targets;
-    private final Map<String, Boolean> equipmentActivations; // Equipment name -> activated
+    private boolean weaponHitEnemy; // Equipment name -> activated
 
     public AttackResult(int baseDamage, double totalBonusMultiplier, List<AttackTarget> targets, 
-                       Map<String, Boolean> equipmentActivations) {
+                       boolean weaponHitEnemy) {
         this.baseDamage = baseDamage;
         this.totalBonusMultiplier = totalBonusMultiplier;
         this.targets = new ArrayList<>(targets);
-        this.equipmentActivations = new HashMap<>(equipmentActivations);
+        this.weaponHitEnemy = weaponHitEnemy;
     }
 
     public int getBaseDamage() {
@@ -37,8 +37,8 @@ public class AttackResult {
         return new ArrayList<>(targets);
     }
 
-    public Map<String, Boolean> getEquipmentActivations() {
-        return new HashMap<>(equipmentActivations);
+    public boolean getWeaponHitEnemy() {
+        return weaponHitEnemy;
     }
 
     /**

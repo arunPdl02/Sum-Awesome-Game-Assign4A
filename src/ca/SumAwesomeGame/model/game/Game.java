@@ -32,7 +32,7 @@ public class Game {
     private boolean readyToAttack = false;
 
     private static final List<GameObserver> observers = new ArrayList<>();
-
+    public boolean weaponCheatActivated = false;
 
     /**
      * Constructs a new Game instance and initializes all game components.
@@ -63,6 +63,7 @@ public class Game {
      */
     public void startNewGame() {
         startNewGame = true;
+        weaponCheatActivated = false;
         update();
         startNewGame = false;
     }

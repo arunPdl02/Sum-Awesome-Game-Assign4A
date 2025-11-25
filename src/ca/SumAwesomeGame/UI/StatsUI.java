@@ -63,13 +63,14 @@ public class StatsUI implements GameObserver {
     private void printAttackStats() {
         AttackResult result = game.getLastAttackResult();
         int baseDamage = result.getBaseDamage();
-        System.out.println("Fill complete! Strength is " + baseDamage);
         Weapon weapon = stats.lastUsedWeapon;
         List<Ring> rings = stats.lastUsedRings;
         List<AttackTarget> targets = result.getTargets();
 
-        if (!rings.isEmpty()) {
-            for(Ring ring: rings){
+        if (rings.isEmpty()) {
+            System.out.println("Fill complete! Strength is " + baseDamage);
+        } else {
+            for (Ring ring : rings) {
                 System.out.println(ring.getName() + " adds " + ring.getAbility());
             }
         }
@@ -78,20 +79,20 @@ public class StatsUI implements GameObserver {
         Optional<Enemy> enemy = game.getEnemyManager().getEnemyAt(primaryTarget);
         int damage = result.calculateDamageForTarget(targets.getFirst());
 
-        if (enemy.isEmpty()){
+        if (enemy.isEmpty()) {
             System.out.println("Misses " + primaryTarget + " character.");
-        }else {
-            System.out.println("Hit " + primaryTarget + " character for " + damage + " damage.");
+        } else {
+            System.out.println("Hit " + primaryTarget + " character for " + damageAfterRingBonus + " damage.");
         }
 
         if (!(weapon instanceof NullWeapon)) {
-            for(int i = 1; i < targets.size(); i++){
+            for (int i = 1; i < targets.size(); i++) {
                 Position position = targets.get(i).getTargetPosition();
                 System.out.println(weapon.getName() + " targets " + position);
                 enemy = game.getEnemyManager().getEnemyAt(position);
-                if (enemy.isEmpty()){
+                if (enemy.isEmpty()) {
                     System.out.println("Missed " + position + " character.");
-                }else {
+                } else {
                     damage = result.calculateDamageForTarget(targets.get(i));
                     System.out.println("Hits " + position + " character for " + damage + " damage.");
                 }

@@ -77,11 +77,6 @@ public class MainUI implements Runnable {
                             System.out.println("Invalid sum, no cells unlocked! Enemy attacks!");
                         }
 
-                        // Display attack output if player just attacked
-                        if (game.didPlayerJustAttack()) {
-                            displayAttackOutput();
-                        }
-
                         // Check if match ended (win or loss)
                         // Trigger update first so Stats can detect the transition
                         game.update();
@@ -171,107 +166,6 @@ public class MainUI implements Runnable {
     }
 
     /**
-     * Displays formatted attack output according to assignment requirements.
-     * Shows fill strength, equipment activations, damage dealt, and enemy kills.
-     */
-    private void displayAttackOutput() {
-        AttackResult result = game.getLastAttackResult();
-        if (result == null) {
-            return;
-        }
-
-        // Display fill complete message
-        System.out.println("Fill complete! Strength is " + result.getBaseDamage() + ".");
-
-        // Display ring activations
-        Map<String, Boolean> activations = result.getEquipmentActivations();
-        for (Map.Entry<String, Boolean> entry : activations.entrySet()) {
-            String equipmentName = entry.getKey();
-            boolean activated = entry.getValue();
-
-            // Skip weapon for now (will handle separately)
-            if (equipmentName.equals("None")) {
-                continue;
-            }
-
-            // Check if it's a ring (not a weapon)
-            List<Ring> rings = game.getPlayer().getEquippedRings();
-            for (Ring ring : rings) {
-                if (ring != null && ring.getName().equals(equipmentName)) {
-                    if (activated) {
-                        // Calculate bonus percentage from multiplier
-                        double bonusMultiplier = getRingBonusMultiplier(ring);
-                        int bonusPercent = (int) Math.round((bonusMultiplier - 1.0) * 100);
-                        System.out.println(equipmentName + " adds " + bonusPercent + "% bonus damage.");
-                    }
-                    break;
-                }
-            }
-        }
-
-        // Get weapon name for targeting messages
-        Weapon weapon = game.getPlayer().getEquippedWeapon();
-        String weaponName = weapon.getName();
-
-        // Display attack results for each target
-        List<AttackTarget> targets = result.getTargets();
-        for (AttackTarget target : targets) {
-            Position pos = target.getTargetPosition();
-            String positionName = pos.name().toLowerCase();
-
-            int damage = result.calculateDamageForTarget(target);
-
-            // Check if enemy is alive (getEnemyAt filters out dead enemies)
-            var enemyOpt = game.getEnemyManager().getEnemyAt(pos);
-
-            if (enemyOpt.isEmpty()) {
-                // Enemy is dead - could be already dead or just killed
-                // Check all enemies to see current health
-                var allEnemies = game.getEnemyManager().getAllEnemies();
-                var enemyAtPos = allEnemies.stream()
-                        .filter(e -> e.getLocation() == pos.ordinal())
-                        .findFirst();
-
-                if (enemyAtPos.isPresent() && enemyAtPos.get().getHealth() == 0 && damage > 0) {
-                    // Enemy health is 0 and damage was applied - it was just killed
-                    if (target.isPrimary()) {
-                        System.out.println("Hit " + positionName + " character for " + damage + " damage.");
-                        System.out.println("Kills " + positionName + " character!");
-                    } else {
-                        System.out.println(weaponName + " targets " + positionName + " character.");
-                        System.out.println("Hit " + positionName + " character for " + damage + " damage.");
-                        System.out.println("Kills " + positionName + " character!");
-                    }
-                } else {
-                    // Enemy was already dead - attack missed
-                    if (target.isPrimary()) {
-                        System.out.println("Missed " + positionName + " character.");
-                    } else {
-                        System.out.println(weaponName + " targets " + positionName + " character.");
-                        System.out.println("Missed " + positionName + " character.");
-                    }
-                }
-            } else {
-                // Enemy is alive - show hit
-                var enemy = enemyOpt.get();
-                int currentHealth = enemy.getHealth();
-
-                if (target.isPrimary()) {
-                    System.out.println("Hit " + positionName + " character for " + damage + " damage.");
-                } else {
-                    System.out.println(weaponName + " targets " + positionName + " character.");
-                    System.out.println("Hit " + positionName + " character for " + damage + " damage.");
-                }
-
-                // Check if enemy was killed (health is 0 after attack)
-                if (currentHealth == 0) {
-                    System.out.println("Kills " + positionName + " character!");
-                }
-            }
-        }
-    }
-
-    /**
      * Helper method to get ring bonus multiplier for display
      */
     private double getRingBonusMultiplier(Ring ring) {
@@ -328,7 +222,7 @@ public class MainUI implements Runnable {
         System.out.println("  'quit' - Exit the game");
 
         String choice = "";
-        while (!choice.equals("new") && !choice.equals("quit")) {
+        while (true) {
             choice = InputHandler.getInput().toLowerCase().trim();
             if (choice.equals("new")) {
                 startGame();

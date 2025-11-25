@@ -43,8 +43,7 @@ public class Attack {
         // Primary target always gets hit at 100% (base attack)
         targets.add(new AttackTarget(primaryTarget,
                 1.0,
-                true,
-                enemyManager.getEnemyAt(primaryTarget).isPresent()));
+                true));
 
 
         // AI Assistance: Multiplicative ring bonus calculation

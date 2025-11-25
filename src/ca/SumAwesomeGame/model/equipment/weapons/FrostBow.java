@@ -12,7 +12,7 @@ import java.util.List;
  * Frost Bow weapon implementation.
  * Activates when cells are selected in ascending order (non-decreasing).
  * When activated, hits all enemy characters at 100% damage.
- * 
+ *
  * @author Sum Awesome Game Team
  */
 public class FrostBow implements Weapon {
@@ -29,17 +29,14 @@ public class FrostBow implements Weapon {
     @Override
     public List<AttackTarget> calculateAttackTargets(Fill fill, Position primaryTarget, EnemyManager team) {
         List<AttackTarget> targets = new ArrayList<>();
-        
-        if (shouldActivate(fill)) {
-            // Hit all opponents at 100%
-            // Primary target is already handled, so we add the other two
-            for (Position pos : Position.values()) {
-                if (pos != primaryTarget && team.getEnemyAt(pos).isPresent()) {
-                    targets.add(new AttackTarget(pos, 1.0, false));
-                }
+
+        // Hit all opponents at 100%
+        for (Position pos : Position.values()) {
+            if (team.getEnemyAt(pos).isPresent()) {
+                targets.add(new AttackTarget(pos, 1.0, false));
             }
         }
-        
+
         return targets;
     }
 }

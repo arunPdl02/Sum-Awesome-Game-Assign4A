@@ -12,7 +12,7 @@ import java.util.List;
  * Fire Staff weapon implementation.
  * Activates when fill is completed with a sufficient number of cell selections.
  * When activated, hits the primary target at 100% damage and adjacent enemies at 50% damage.
- * 
+ *
  * @author Sum Awesome Game Team
  */
 public class FireStaff implements Weapon {
@@ -31,34 +31,33 @@ public class FireStaff implements Weapon {
     @Override
     public List<AttackTarget> calculateAttackTargets(Fill fill, Position primaryTarget, EnemyManager team) {
         List<AttackTarget> targets = new ArrayList<>();
-        
-        if (shouldActivate(fill)) {
-            // Primary target is handled separately at 100%, we only add side targets at 50%
-            switch (primaryTarget) {
-                case LEFT -> {
-                    // Left side: also hit middle
-                    if (team.getEnemyAt(Position.MIDDLE).isPresent()) {
-                        targets.add(new AttackTarget(Position.MIDDLE, 0.5, false));
-                    }
+
+        switch (primaryTarget) {
+            case LEFT -> {
+                // Left side: also hit middle
+                if (team.getEnemyAt(Position.MIDDLE).isPresent()) {
+                    targets.add(new AttackTarget(Position.MIDDLE, 0.5, false));
                 }
-                case MIDDLE -> {
-                    // Middle: hit both sides
-                    if (team.getEnemyAt(Position.LEFT).isPresent()) {
-                        targets.add(new AttackTarget(Position.LEFT, 0.5, false));
-                    }
-                    if (team.getEnemyAt(Position.RIGHT).isPresent()) {
-                        targets.add(new AttackTarget(Position.RIGHT, 0.5, false));
-                    }
+            }
+            case MIDDLE -> {
+                // Middle: hit both sides
+                if (team.getEnemyAt(Position.LEFT).isPresent()) {
+                    targets.add(new AttackTarget(Position.LEFT, 0.5, false));
                 }
-                case RIGHT -> {
-                    // Right side: also hit middle
-                    if (team.getEnemyAt(Position.MIDDLE).isPresent()) {
-                        targets.add(new AttackTarget(Position.MIDDLE, 0.5, false));
-                    }
+                if (team.getEnemyAt(Position.MIDDLE).isPresent()) {
+                    targets.add(new AttackTarget(Position.MIDDLE, 1, false));
+                }
+                if (team.getEnemyAt(Position.RIGHT).isPresent()) {
+                    targets.add(new AttackTarget(Position.RIGHT, 0.5, false));
+                }
+            }
+            case RIGHT -> {
+                // Right side: also hit middle
+                if (team.getEnemyAt(Position.MIDDLE).isPresent()) {
+                    targets.add(new AttackTarget(Position.MIDDLE, 0.5, false));
                 }
             }
         }
-        
         return targets;
     }
 }

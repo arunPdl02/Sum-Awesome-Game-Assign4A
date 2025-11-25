@@ -1,14 +1,19 @@
 package ca.SumAwesomeGame.UI;
 
+import ca.SumAwesomeGame.model.character.Enemy;
 import ca.SumAwesomeGame.model.equipment.rings.Ring;
 import ca.SumAwesomeGame.model.equipment.weapons.NullWeapon;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.game.AttackResult;
+import ca.SumAwesomeGame.model.game.AttackTarget;
 import ca.SumAwesomeGame.model.game.Game;
+import ca.SumAwesomeGame.model.game.Position;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 import ca.SumAwesomeGame.model.stats.Stats;
 
+import java.lang.annotation.Target;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * UI component for displaying game statistics.
@@ -57,16 +62,40 @@ public class StatsUI implements GameObserver {
 
     private void printAttackStats() {
         AttackResult result = game.getLastAttackResult();
-        System.out.println("Fill complete! Strength is " + result.getBaseDamage());
+        int baseDamage = result.getBaseDamage();
+        System.out.println("Fill complete! Strength is " + baseDamage);
         Weapon weapon = stats.lastUsedWeapon;
         List<Ring> rings = stats.lastUsedRings;
+        List<AttackTarget> targets = result.getTargets();
+
         if (!rings.isEmpty()) {
             for(Ring ring: rings){
                 System.out.println(ring.getName() + " adds " + ring.getAbility());
             }
         }
+        int damageAfterRingBonus = (int) result.getTotalBonusMultiplier() * baseDamage;
+        Position primaryTarget = targets.getFirst().getTargetPosition();
+        Optional<Enemy> enemy = game.getEnemyManager().getEnemyAt(primaryTarget);
+        int damage = result.calculateDamageForTarget(targets.getFirst());
+
+        if (enemy.isEmpty()){
+            System.out.println("Misses " + primaryTarget + " character.");
+        }else {
+            System.out.println("Hit " + primaryTarget + " character for " + damage + " damage.");
+        }
+
         if (!(weapon instanceof NullWeapon)) {
-            System.out.println(weapon.getName() + " targets ");
+            for(int i = 1; i < targets.size(); i++){
+                Position position = targets.get(i).getTargetPosition();
+                System.out.println(weapon.getName() + " targets " + position);
+                enemy = game.getEnemyManager().getEnemyAt(position);
+                if (enemy.isEmpty()){
+                    System.out.println("Missed " + position + " character.");
+                }else {
+                    damage = result.calculateDamageForTarget(targets.get(i));
+                    System.out.println("Hits " + position + " character for " + damage + " damage.");
+                }
+            }
         }
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
  * Activates when fill is completed in less than the time threshold.
  * When activated, targets an additional random enemy at 50% damage.
  * The additional target may be the same as the primary target.
- * 
+ *
  * @author Sum Awesome Game Team
  */
 public class SparkleDagger implements Weapon {
@@ -32,18 +32,16 @@ public class SparkleDagger implements Weapon {
     @Override
     public List<AttackTarget> calculateAttackTargets(Fill fill, Position primaryTarget, EnemyManager team) {
         List<AttackTarget> targets = new ArrayList<>();
-        
-        if (shouldActivate(fill)) {
-            // Get a random alive enemy (might be same as primary target)
-            team.getRandomEnemy().ifPresent(enemy -> {
-                int location = enemy.getLocation();
-                if (location >= 0 && location < 3) {
-                    Position randomPosition = Position.values()[location];
-                    targets.add(new AttackTarget(randomPosition, 0.5, false)); // 50% damage, not primary
-                }
-            });
-        }
-        
+
+        // Get a random alive enemy (might be same as primary target)
+        team.getRandomEnemy().ifPresent(enemy -> {
+            int location = enemy.getLocation();
+            if (location >= 0 && location < 3) {
+                Position randomPosition = Position.values()[location];
+                targets.add(new AttackTarget(randomPosition, 0.5, false)); // 50% damage, not primary
+            }
+        });
+
         return targets;
     }
 }

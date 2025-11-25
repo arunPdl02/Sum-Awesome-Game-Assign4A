@@ -29,8 +29,6 @@ public class DiamondSword implements Weapon {
     @Override
     public List<AttackTarget> calculateAttackTargets(Fill fill, Position primaryTarget, EnemyManager team) {
         List<AttackTarget> targets = new ArrayList<>();
-        
-        if (shouldActivate(fill)) {
             // Primary target is handled separately at 100%, we add side targets at 75%
             switch (primaryTarget) {
                 case LEFT -> {
@@ -55,8 +53,6 @@ public class DiamondSword implements Weapon {
                     }
                 }
             }
-        }
-        
         return targets;
     }
 }

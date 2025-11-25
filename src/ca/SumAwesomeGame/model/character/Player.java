@@ -3,6 +3,7 @@ package ca.SumAwesomeGame.model.character;
 import ca.SumAwesomeGame.model.equipment.rings.Ring;
 import ca.SumAwesomeGame.model.equipment.weapons.NullWeapon;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
+import ca.SumAwesomeGame.model.equipment.weapons.WeaponsManager;
 import ca.SumAwesomeGame.model.game.Attack;
 import ca.SumAwesomeGame.model.game.AttackResult;
 import ca.SumAwesomeGame.model.game.AttackTarget;
@@ -62,6 +63,7 @@ public class Player implements GameObserver {
 
     private void attack() {
         // Create attack with equipment integration
+        equippedWeapon = new WeaponsManager().getActiveWeapon(game.getFillObject());
         Attack attack = new Attack(game.getFillObject(), this, game.getEnemyManager());
         AttackResult result = attack.getResult();
 
@@ -135,7 +137,7 @@ public class Player implements GameObserver {
      * @return List of the equipped rings array
      */
     public List<Ring> getEquippedRings() {
-        return equippedRings; // Return copy to prevent external modification
+        return new ArrayList<>(equippedRings); // Return copy to prevent external modification
     }
 
     /**

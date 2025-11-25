@@ -1,25 +1,24 @@
 package ca.SumAwesomeGame.model.character;
 
+import ca.SumAwesomeGame.model.game.CellPosition;
 import ca.SumAwesomeGame.model.game.Game;
 
 public class Enemy{
     private Game game;
-    private final int location;
+    private final CellPosition location;
     private int health = 50;
 
     public int getAttackStrength() {
         return attackStrength;
     }
 
-    private final int attackStrength = 500;
-    private Player player;
+    private final int attackStrength = 10;
 
-    public Enemy(int location, Player player) {
+    public Enemy(CellPosition location) {
         this.location = location;
-        this.player = player;
     }
 
-    public int getLocation() {
+    public CellPosition getLocation() {
         return location;
     }
 
@@ -33,10 +32,6 @@ public class Enemy{
 
     public void reduceHealth(int damage){
         health -= damage;
-    }
-
-    public void attack() {
-        player.reduceHealth(attackStrength);
     }
 
 }

@@ -24,23 +24,30 @@ public class EnemyManager implements GameObserver {
     @Override
     public GameEvent update(GameEvent event) {
         GameEvent newEvent = new GameEvent(GameEvents.NO_NEW_EVENT);
-        updateCount++;
-        if (updateCount % GameMath.getRandomValueBetween(3, 5) == 0) {
-            Enemy oneRandomEnemy = listOfEnemies.get(GameMath.getRandomValueBetween(0, 2));
-            oneRandomEnemy.attack();
-        }
         switch (event.getEvent()){
-            case NEW_GAME -> createNewSetOfEnemies();
-            case PLAYER_ATTACKED, INVALID_MOVE -> {
-                playerAttacked(event.getCell());
-                newEvent = new GameEvent(GameEvents.ENEMY_ATTACKED,
-                        -1,
-                        -1,
-                        CellPosition.NONE,
-                        getRandomEnemy().getAttackStrength());
+            case VALID_MOVE -> {
+                updateCount++;
+                if (updateCount % GameMath.getRandomValueBetween(3, 5) == 0) {
+                    newEvent = getEnemyAttackEvent();
+                }
             }
+            case NEW_GAME -> createNewSetOfEnemies();
+            case PLAYER_ATTACKED -> {
+                playerAttacksEnemy(event.getCell(), event.getValue());
+                newEvent = getEnemyAttackEvent();
+            }
+            case INVALID_MOVE -> newEvent = getEnemyAttackEvent();
         }
         return newEvent;
+    }
+
+    private GameEvent getEnemyAttackEvent() {
+        Enemy randomEnemy = getRandomEnemy();
+        return new GameEvent(GameEvents.ENEMY_ATTACKED,
+                -1,
+                -1,
+                randomEnemy.getLocation(),
+                randomEnemy.getAttackStrength());
     }
 
     private Enemy getRandomEnemy() {
@@ -48,12 +55,11 @@ public class EnemyManager implements GameObserver {
         return listOfEnemies.get(GameMath.getRandomValueBetween(0,2));
     }
 
-    private void playerAttacked(CellPosition lastUnlockedCellPosition) {
-        System.out.println("here" + game.getPlayerAttackStrength() + lastUnlockedCellPosition);
+    private void playerAttacksEnemy(CellPosition lastUnlockedCellPosition, int attackValue) {
         switch (lastUnlockedCellPosition){
-            case ONE -> listOfEnemies.getFirst().reduceHealth(game.getPlayerAttackStrength());
-            case TWO -> listOfEnemies.get(1).reduceHealth(game.getPlayerAttackStrength());
-            case THREE -> listOfEnemies.get(2).reduceHealth(game.getPlayerAttackStrength());
+            case ONE -> listOfEnemies.getFirst().reduceHealth(attackValue);
+            case TWO -> listOfEnemies.get(1).reduceHealth(attackValue);
+            case THREE -> listOfEnemies.get(2).reduceHealth(attackValue);
         }
     }
 
@@ -66,8 +72,11 @@ public class EnemyManager implements GameObserver {
     private void createNewSetOfEnemies(){
         listOfEnemies.clear();
         for (int i = 0; i < numberOfEnemies; i++) {
-            Enemy e = new Enemy(i, game.player);
-            listOfEnemies.add(e);
+            switch (i){
+                case 0 -> listOfEnemies.add(new Enemy(CellPosition.ONE));
+                case 1 -> listOfEnemies.add(new Enemy(CellPosition.TWO));
+                case 2 -> listOfEnemies.add(new Enemy(CellPosition.THREE));
+            }
         }
     }
 

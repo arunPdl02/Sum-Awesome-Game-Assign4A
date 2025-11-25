@@ -9,9 +9,6 @@ public class Fill implements GameObserver {
     private final boolean[][] fillCompleted = new boolean[3][3];
     private int fillCount = 0;
 
-    public Fill() {
-        resetFill();
-    }
 
     private void resetFill() {
         strength = 0;
@@ -25,13 +22,20 @@ public class Fill implements GameObserver {
     public GameEvent update(GameEvent event) {
         GameEvent newEvent = new GameEvent(GameEvents.NO_NEW_EVENT);
         switch (event.getEvent()) {
-            case VALID_MOVE -> increaseFillStrength(event.getValue(),
+            case VALID_MOVE ->{
+                increaseFillStrength(event.getValue(),
                     event.getCellRow(),
                     event.getCellCol());
+                if (isFillComplete()) {
+                    newEvent = new GameEvent(
+                            GameEvents.FILL_COMPLETE,
+                            event.getCellRow(),
+                            event.getCellCol(),
+                            event.getCell(),
+                            getFillStrength());
+                }
+            }
             case NEW_GAME, PLAYER_ATTACKED -> resetFill();
-        }
-        if (isFillComplete()) {
-            newEvent = new GameEvent(GameEvents.FILL_COMPLETE);
         }
         return newEvent;
     }
@@ -54,7 +58,7 @@ public class Fill implements GameObserver {
     }
 
     private boolean isFillComplete() {
-        return fillCount == 8;
+        return fillCount == 3;
     }
 
 }

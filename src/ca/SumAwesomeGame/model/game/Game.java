@@ -32,8 +32,8 @@ public class Game {
         enemies = new EnemyManager(NUMBER_OF_ENEMIES);
 
         fill.listenToGame(this);
-        enemies.listenToGame(this);
         player.listenToGame(this);
+        enemies.listenToGame(this);
         board.listenToGame(this);
         stats.listenToGame(this);
     }
@@ -44,7 +44,6 @@ public class Game {
 
     public void startNewGame() {
         gameId++;
-        System.out.println("new game in game");
         events.add(new GameEvent(GameEvents.NEW_GAME));
         update();
     }
@@ -74,12 +73,7 @@ public class Game {
         } catch (IllegalArgumentException e) {
             events.add(new GameEvent(GameEvents.INVALID_MOVE));
         }
-
         update();
-
-        if (didPlayerJustAttack()) {
-            update();
-        }
     }
 
     public Optional<Cell> isSumValid(int sum) {
@@ -107,6 +101,9 @@ public class Game {
         while (!events.isEmpty()) {
             GameEvent e = events.poll();
             for (GameObserver o : observers) {
+//                if (e.getEvent() != GameEvents.NO_NEW_EVENT) {
+//                    System.out.println(e.getEvent());
+//                }
                 GameEvent newEvent = o.update(e);
                 if (newEvent.getEvent() != GameEvents.NO_NEW_EVENT) {
                     events.add(newEvent);
@@ -134,8 +131,5 @@ public class Game {
         return player.getAttackStrength();
     }
 
-    public boolean didPlayerJustAttack() {
-        return player.justAttacked;
-    }
 
 }

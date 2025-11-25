@@ -6,6 +6,8 @@ import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.equipment.weapons.WeaponsManager;
 import ca.SumAwesomeGame.model.game.Attack;
 import ca.SumAwesomeGame.model.game.Game;
+import ca.SumAwesomeGame.model.game.GameEvent;
+import ca.SumAwesomeGame.model.game.GameEvents;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 
 public class Player implements GameObserver {
@@ -50,17 +52,32 @@ public class Player implements GameObserver {
     }
 
     @Override
-    public void update() {
-        if (game.readyToAttack){
-            attack();
-            justAttacked = true;
-        } else if (justAttacked) {
-            resetAttack();
+    public GameEvent update(GameEvent event) {
+        GameEvent newEvent = new GameEvent(GameEvents.NO_NEW_EVENT);
+        switch (event.getEvent()){
+            case NEW_GAME -> {
+                health = 1000;
+                resetAttack();
+            }
+            case FILL_COMPLETE -> {
+                attack();
+                newEvent = new GameEvent(
+                        GameEvents.PLAYER_ATTACKED,
+                        event.getCellRow(),
+                        event.getCellCol(),
+                        event.getCell(),
+                        attackStrength
+                        );
+            }
+            case PLAYER_ATTACKED -> resetAttack();
+            case ENEMY_ATTACKED -> {
+                reduceHealth(event.getValue());
+                if (health == 0){
+                    newEvent = new GameEvent(GameEvents.PLAYER_DIED);
+                }
+            }
         }
-        if (game.startNewGame) {
-            health = 1000;
-            resetAttack();
-        }
+        return newEvent;
     }
 
     @Override

@@ -2,6 +2,8 @@ package ca.SumAwesomeGame.model.character;
 
 import ca.SumAwesomeGame.model.game.CellPosition;
 import ca.SumAwesomeGame.model.game.Game;
+import ca.SumAwesomeGame.model.game.GameEvent;
+import ca.SumAwesomeGame.model.game.GameEvents;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 import ca.SumAwesomeGame.model.util.GameMath;
 
@@ -20,20 +22,33 @@ public class EnemyManager implements GameObserver {
     }
 
     @Override
-    public void update() {
+    public GameEvent update(GameEvent event) {
+        GameEvent newEvent = new GameEvent(GameEvents.NO_NEW_EVENT);
         updateCount++;
         if (updateCount % GameMath.getRandomValueBetween(3, 5) == 0) {
             Enemy oneRandomEnemy = listOfEnemies.get(GameMath.getRandomValueBetween(0, 2));
             oneRandomEnemy.attack();
         }
-        if (game.didPlayerJustAttack()){
-            enemyAttacked(game.getLastUnlockedCellPosition());
-        } else if (game.startNewGame) {
-            createNewSetOfEnemies();
+        switch (event.getEvent()){
+            case NEW_GAME -> createNewSetOfEnemies();
+            case PLAYER_ATTACKED, INVALID_MOVE -> {
+                playerAttacked(event.getCell());
+                newEvent = new GameEvent(GameEvents.ENEMY_ATTACKED,
+                        -1,
+                        -1,
+                        CellPosition.NONE,
+                        getRandomEnemy().getAttackStrength());
+            }
         }
+        return newEvent;
     }
 
-    private void enemyAttacked(CellPosition lastUnlockedCellPosition) {
+    private Enemy getRandomEnemy() {
+        //TODO only alive enemy attacks
+        return listOfEnemies.get(GameMath.getRandomValueBetween(0,2));
+    }
+
+    private void playerAttacked(CellPosition lastUnlockedCellPosition) {
         System.out.println("here" + game.getPlayerAttackStrength() + lastUnlockedCellPosition);
         switch (lastUnlockedCellPosition){
             case ONE -> listOfEnemies.getFirst().reduceHealth(game.getPlayerAttackStrength());

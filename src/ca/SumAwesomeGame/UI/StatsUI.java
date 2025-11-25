@@ -1,6 +1,8 @@
 package ca.SumAwesomeGame.UI;
 
 import ca.SumAwesomeGame.model.game.Game;
+import ca.SumAwesomeGame.model.game.GameEvent;
+import ca.SumAwesomeGame.model.game.GameEvents;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 
 public class StatsUI implements GameObserver {
@@ -10,8 +12,9 @@ public class StatsUI implements GameObserver {
     }
 
     @Override
-    public void update() {
+    public GameEvent update(GameEvent event) {
 
+        return new GameEvent(GameEvents.NO_NEW_EVENT);
     }
 
     @Override

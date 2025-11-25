@@ -5,9 +5,7 @@ import ca.SumAwesomeGame.model.character.Player;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 import ca.SumAwesomeGame.model.stats.Stats;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Game {
     public long gameId;
@@ -23,10 +21,7 @@ public class Game {
     public final int ROW_SIZE = 3;
     public final int COL_SIZE = 3;
 
-    public boolean startNewGame = false;
-    public int lastFillIncrease = 0;
-    private CellPosition lastUnlockedCellPosition;
-    public boolean readyToAttack = false;
+    private final Queue<GameEvent> events = new LinkedList<>();
 
     private static final List<GameObserver> observers = new ArrayList<>();
 
@@ -49,9 +44,9 @@ public class Game {
 
     public void startNewGame() {
         gameId++;
-        startNewGame = true;
+        System.out.println("new game in game");
+        events.add(new GameEvent(GameEvents.NEW_GAME));
         update();
-        startNewGame = false;
     }
 
     public int getPlayerHealth() {
@@ -63,34 +58,28 @@ public class Game {
     }
 
     public void play(int sum) {
-        Cell validCell = isSumValid(sum)
-                .orElseThrow(IllegalArgumentException::new);
-
-        lastUnlockedCellPosition = validCell.unlockCell()
-                .orElseThrow(UnsupportedOperationException::new);
-
-        lastFillIncrease = sum;
-        readyToAttack = fillComplete();
+        try {
+            Cell validCell = isSumValid(sum)
+                    .orElseThrow(IllegalArgumentException::new);
+            CellPosition lastUnlockedCellPosition = validCell.unlockCell()
+                    .orElseThrow(UnsupportedOperationException::new);
+            events.add(new GameEvent(
+                            GameEvents.VALID_MOVE,
+                            validCell.getRow(),
+                            validCell.getCol(),
+                            lastUnlockedCellPosition,
+                            validCell.getValue()
+                    )
+            );
+        } catch (IllegalArgumentException e) {
+            events.add(new GameEvent(GameEvents.INVALID_MOVE));
+        }
 
         update();
 
-        if(didPlayerJustAttack()){
-            readyToAttack = false;
+        if (didPlayerJustAttack()) {
             update();
         }
-    }
-
-    public boolean fillComplete() {
-        int count = 0;
-        for (int i = 0; i < ROW_SIZE; i++) {
-            for (int j = 0; j < COL_SIZE; j++) {
-                if (board.cellUnlocked(i, j)) {
-                    count++;
-                }
-            }
-        }
-        return count == 8;
-//        return count == 3; //for testing
     }
 
     public Optional<Cell> isSumValid(int sum) {
@@ -114,13 +103,19 @@ public class Game {
         return lastMatch;
     }
 
-    public void update(){
-        for (GameObserver e : observers) {
-            e.update();
+    public void update() {
+        while (!events.isEmpty()) {
+            GameEvent e = events.poll();
+            for (GameObserver o : observers) {
+                GameEvent newEvent = o.update(e);
+                if (newEvent.getEvent() != GameEvents.NO_NEW_EVENT) {
+                    events.add(newEvent);
+                }
+            }
         }
     }
 
-    public void subscribe(GameObserver observer){
+    public void subscribe(GameObserver observer) {
         observers.add(observer);
     }
 
@@ -135,15 +130,11 @@ public class Game {
         return boardString.toString();
     }
 
-    public CellPosition getLastUnlockedCellPosition() {
-        return lastUnlockedCellPosition;
-    }
-
-    public int getPlayerAttackStrength(){
+    public int getPlayerAttackStrength() {
         return player.getAttackStrength();
     }
 
-    public boolean didPlayerJustAttack(){
+    public boolean didPlayerJustAttack() {
         return player.justAttacked;
     }
 

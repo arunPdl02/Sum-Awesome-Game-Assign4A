@@ -11,16 +11,17 @@ import java.util.List;
 
 public class MainUI implements Runnable, GameObserver {
 
-    private TextUI text = new TextUI();
+    private TextUI textUI = new TextUI();
     private StatsUI statsUI = new StatsUI();
     private Game game;
     private GameBoard board;
     private int[] enemyHealth;
 
-    public MainUI() {
-        game = new Game();
+    public MainUI(Game game) {
+        this.game = game;
         game.subscribe(this);
         statsUI.listenToGame(game);
+        textUI.listenToGame(game);
     }
 
     @Override
@@ -82,9 +83,7 @@ public class MainUI implements Runnable, GameObserver {
 
     @Override
     public GameEvent update(GameEvent event) {
-        switch (event.getEvent()){
-            case INVALID_MOVE -> System.out.println("Invalid sum, no cells unlocked!");
-        }
+
         return new GameEvent(GameEvents.NO_NEW_EVENT);
     }
 

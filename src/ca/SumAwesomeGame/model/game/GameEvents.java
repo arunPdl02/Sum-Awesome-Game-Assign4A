@@ -12,5 +12,7 @@ public enum GameEvents {
     ENEMY_ATTACKED,
     GAME_WON,
     GAME_LOSS,
-    PLAYER_DIED, NO_NEW_EVENT
+    PLAYER_DIED,
+    ENEMY_DIED,
+    NO_NEW_EVENT
 }

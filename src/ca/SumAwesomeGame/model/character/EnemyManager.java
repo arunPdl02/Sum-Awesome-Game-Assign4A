@@ -57,9 +57,9 @@ public class EnemyManager implements GameObserver {
 
     private void playerAttacksEnemy(CellPosition lastUnlockedCellPosition, int attackValue) {
         switch (lastUnlockedCellPosition){
-            case ONE -> listOfEnemies.getFirst().reduceHealth(attackValue);
-            case TWO -> listOfEnemies.get(1).reduceHealth(attackValue);
-            case THREE -> listOfEnemies.get(2).reduceHealth(attackValue);
+            case FIRST -> listOfEnemies.getFirst().reduceHealth(attackValue);
+            case SECOND -> listOfEnemies.get(1).reduceHealth(attackValue);
+            case THIRD -> listOfEnemies.get(2).reduceHealth(attackValue);
         }
     }
 
@@ -73,9 +73,9 @@ public class EnemyManager implements GameObserver {
         listOfEnemies.clear();
         for (int i = 0; i < numberOfEnemies; i++) {
             switch (i){
-                case 0 -> listOfEnemies.add(new Enemy(CellPosition.ONE));
-                case 1 -> listOfEnemies.add(new Enemy(CellPosition.TWO));
-                case 2 -> listOfEnemies.add(new Enemy(CellPosition.THREE));
+                case 0 -> listOfEnemies.add(new Enemy(CellPosition.FIRST));
+                case 1 -> listOfEnemies.add(new Enemy(CellPosition.SECOND));
+                case 2 -> listOfEnemies.add(new Enemy(CellPosition.THIRD));
             }
         }
     }

@@ -6,7 +6,8 @@ import java.util.List;
 
 public class RingsManager {
     private final List<Ring> listOfRings = Arrays.asList(Ring.values());
-    private List<Ring> activeRings = new ArrayList<>(); // is set by observing stats class
+    // is set by observing stats class
+    private List<Ring> activeRings = new ArrayList<>();
 
     public List<Ring> getActiveRings() {
         return activeRings;

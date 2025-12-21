@@ -36,9 +36,9 @@ public class GameBoard implements GameObserver {
                 int randomValue = GameMath.getRandomValueBetween(MIN_VALUE, MAX_VALUE);
                 CellPosition position = null;
                 switch (j) {
-                    case 0 -> position = CellPosition.ONE;
-                    case 1 -> position = CellPosition.TWO;
-                    case 2 -> position = CellPosition.THREE;
+                    case 0 -> position = CellPosition.FIRST;
+                    case 1 -> position = CellPosition.SECOND;
+                    case 2 -> position = CellPosition.THIRD;
                 }
                 board[i][j] = new Cell(randomValue, position, i, j);
             }

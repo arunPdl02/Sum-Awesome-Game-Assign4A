@@ -15,7 +15,6 @@ public class Stats implements GameObserver {
     private int damageReceived;
     private int totalNumberOfFills;
     private List<Weapon> weaponsUsed = new ArrayList<>();
-    private Game game;
 
     public void addUsedWeapon(Weapon currentWeapon) {
         weaponsUsed.add(currentWeapon);
@@ -30,7 +29,6 @@ public class Stats implements GameObserver {
 
     @Override
     public void listenToGame(Game game) {
-        this.game = game;
         game.subscribe(this);
     }
 }

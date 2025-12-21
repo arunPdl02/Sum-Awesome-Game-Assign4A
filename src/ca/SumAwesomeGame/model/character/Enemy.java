@@ -4,7 +4,6 @@ import ca.SumAwesomeGame.model.game.CellPosition;
 import ca.SumAwesomeGame.model.game.Game;
 
 public class Enemy{
-    private Game game;
     private final CellPosition location;
     private int health = 50;
 

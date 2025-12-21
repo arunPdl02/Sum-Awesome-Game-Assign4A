@@ -11,7 +11,6 @@ import ca.SumAwesomeGame.model.game.GameEvents;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 
 public class Player implements GameObserver {
-    private Game game;
     private WeaponsManager weapons;
     private RingsManager myRings;
 
@@ -78,7 +77,6 @@ public class Player implements GameObserver {
 
     @Override
     public void listenToGame(Game game) {
-        this.game = game;
         game.subscribe(this);
     }
 }

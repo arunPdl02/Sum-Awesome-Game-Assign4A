@@ -5,7 +5,6 @@ import ca.SumAwesomeGame.model.util.GameMath;
 
 public class GameBoard implements GameObserver {
     private final Cell[][] board;
-    private Game game;
 
     private final int MIN_VALUE = 0;
     private final int MAX_VALUE = 15;
@@ -68,7 +67,6 @@ public class GameBoard implements GameObserver {
 
     @Override
     public void listenToGame(Game game) {
-        this.game = game;
         game.subscribe(this);
 
     }

@@ -6,7 +6,6 @@ import ca.SumAwesomeGame.model.game.GameEvents;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 
 public class StatsUI implements GameObserver {
-    private Game game;
 
     public StatsUI(){
     }
@@ -19,7 +18,6 @@ public class StatsUI implements GameObserver {
 
     @Override
     public void listenToGame(Game game) {
-        this.game = game;
         game.subscribe(this);
 
     }

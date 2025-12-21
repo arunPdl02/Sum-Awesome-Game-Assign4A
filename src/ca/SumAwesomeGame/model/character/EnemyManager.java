@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnemyManager implements GameObserver {
-    private Game game;
     private final List<Enemy> listOfEnemies = new ArrayList<>();
     private final int numberOfEnemies;
     private int updateCount;
@@ -65,7 +64,6 @@ public class EnemyManager implements GameObserver {
 
     @Override
     public void listenToGame(Game game) {
-        this.game = game;
         game.subscribe(this);
     }
 

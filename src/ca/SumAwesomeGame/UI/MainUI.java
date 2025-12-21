@@ -38,7 +38,7 @@ public class MainUI implements Runnable, GameObserver {
             try{
                 switch (inputArrayWord[0]){
                     case "gear" -> showGear();
-                    case "stats" -> showStats();
+                    case "stats" -> statsUI.showStats();
                     case "new" -> startGame();
                     case "cheat" -> Cheat.handleCheat(input);
                     case "quit" -> System.exit(0);
@@ -56,8 +56,6 @@ public class MainUI implements Runnable, GameObserver {
     }
 
     private void showGear() {
-    }
-    private void showStats(){
     }
 
     private void printPlayerStat() {

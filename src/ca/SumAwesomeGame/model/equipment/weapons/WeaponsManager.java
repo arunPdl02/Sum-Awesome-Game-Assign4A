@@ -1,7 +1,5 @@
 package ca.SumAwesomeGame.model.equipment.weapons;
 
-import ca.SumAwesomeGame.model.stats.Stats;
-
 import java.util.Arrays;
 import java.util.List;
 

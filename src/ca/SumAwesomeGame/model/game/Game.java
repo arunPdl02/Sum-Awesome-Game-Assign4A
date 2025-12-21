@@ -3,7 +3,6 @@ package ca.SumAwesomeGame.model.game;
 import ca.SumAwesomeGame.model.character.EnemyManager;
 import ca.SumAwesomeGame.model.character.Player;
 import ca.SumAwesomeGame.model.observer.GameObserver;
-import ca.SumAwesomeGame.model.stats.Stats;
 
 import java.util.*;
 
@@ -15,7 +14,6 @@ public class Game {
 
     public Player player = new Player();
     private final Fill fill = new Fill();
-    public Stats stats = new Stats();
 
     private final int NUMBER_OF_ENEMIES = 3;
     public final int ROW_SIZE = 3;
@@ -35,7 +33,6 @@ public class Game {
         player.listenToGame(this);
         enemies.listenToGame(this);
         board.listenToGame(this);
-        stats.listenToGame(this);
     }
 
     public List<Integer> getEnemyHealth() {

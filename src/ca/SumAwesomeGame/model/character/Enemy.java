@@ -1,7 +1,6 @@
 package ca.SumAwesomeGame.model.character;
 
 import ca.SumAwesomeGame.model.game.CellPosition;
-import ca.SumAwesomeGame.model.game.Game;
 
 public class Enemy{
     private final CellPosition location;

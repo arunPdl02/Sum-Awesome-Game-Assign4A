@@ -7,12 +7,12 @@ import java.util.Arrays;
 public class Fill implements GameObserver {
     private int strength = 0;
     private final boolean[][] fillCompleted = new boolean[3][3];
+    private int numberOfCellUnlocked = 0;
     private int fillCount = 0;
-
 
     private void resetFill() {
         strength = 0;
-        fillCount = 0;
+        numberOfCellUnlocked = 0;
         for (boolean[] booleans : fillCompleted) {
             Arrays.fill(booleans, false);
         }
@@ -51,14 +51,18 @@ public class Fill implements GameObserver {
 
     public void increaseFillStrength(int increase, int row, int col) {
         if (!fillCompleted[row][col]) {
-            fillCount++;
+            numberOfCellUnlocked++;
             fillCompleted[row][col] = true;
         }
+        fillCount++;
         strength += increase;
     }
 
     private boolean isFillComplete() {
-        return fillCount == 3;
+        return numberOfCellUnlocked == 3;
     }
 
+    public int getFillCount() {
+        return fillCount;
+    }
 }

@@ -1,45 +1,37 @@
 package ca.SumAwesomeGame.model.character;
 
-import ca.SumAwesomeGame.model.equipment.rings.Ring;
-import ca.SumAwesomeGame.model.equipment.rings.RingsManager;
+import ca.SumAwesomeGame.model.equipment.weapons.NoWeapon;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.equipment.weapons.WeaponsManager;
-import ca.SumAwesomeGame.model.game.Attack;
-import ca.SumAwesomeGame.model.game.Game;
-import ca.SumAwesomeGame.model.game.GameEvent;
-import ca.SumAwesomeGame.model.game.GameEvents;
+import ca.SumAwesomeGame.model.game.*;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 
+
 public class Player implements GameObserver {
-    private WeaponsManager weapons;
-    private RingsManager myRings;
+    private final WeaponsManager weapons = new WeaponsManager();
+    private final Fill fill;
 
-    private Weapon equippedWeapon;
-    private Ring[] equippedRings = new Ring[3];
+    private Weapon currentWeapon = new NoWeapon();
 
-    private int attackStrength;
     private int health = 1000;
+    private final Attack attack;
 
-    public Player() {
-    }
-
-    public int getAttackStrength() {
-        return attackStrength;
+    public Player(Fill fill, EnemyManager enemyManager) {
+        this.fill = fill;
+        this.attack = new Attack(enemyManager);
     }
 
     public void resetAttack(){
-        attackStrength = 0;
+        attack.reset();
     }
 
     public int getHealth() {
         return health;
     }
 
-    private void attack(int fillStrength) {
-//        Weapon currentWeapon = weapons.equipWeapon();
-//        List<Ring> currentRings = myRings.getActiveRings();
-        Attack attack = new Attack(fillStrength);
-        attackStrength = attack.getAttackStrength();
+    private void attack(CellPosition attackPosition) {
+        //TODO rings logic
+        attack.initiateAttack(fill, currentWeapon, attackPosition);
     }
 
     public void reduceHealth(int EnemyAttackStrength) {
@@ -55,13 +47,13 @@ public class Player implements GameObserver {
                 resetAttack();
             }
             case FILL_COMPLETE -> {
-                attack(event.getValue());
+                attack(event.getCell());
                 newEvent = new GameEvent(
                         GameEvents.PLAYER_ATTACKED,
                         event.getCellRow(),
                         event.getCellCol(),
                         event.getCell(),
-                        attackStrength
+                        event.getValue()
                         );
             }
             case PLAYER_ATTACKED -> resetAttack();
@@ -71,6 +63,7 @@ public class Player implements GameObserver {
                     newEvent = new GameEvent(GameEvents.PLAYER_DIED);
                 }
             }
+            case GAME_WON -> currentWeapon = weapons.getRandomWeapon();
         }
         return newEvent;
     }

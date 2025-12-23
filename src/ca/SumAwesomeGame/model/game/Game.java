@@ -9,26 +9,20 @@ import java.util.*;
 public class Game {
     public long gameId;
 
-    public GameBoard board;
-    private EnemyManager enemies;
-
-    public Player player = new Player();
-    private final Fill fill = new Fill();
-
-    private final int NUMBER_OF_ENEMIES = 3;
-    public final int ROW_SIZE = 3;
-    public final int COL_SIZE = 3;
-
-    private final Queue<GameEvent> events = new LinkedList<>();
+    private static final int NUMBER_OF_ENEMIES = 3;
+    public static final int ROW_SIZE = 3;
+    public static final int COL_SIZE = 3;
 
     private static final List<GameObserver> observers = new ArrayList<>();
+    private final Queue<GameEvent> events = new LinkedList<>();
 
+    private final GameBoard board = new GameBoard(ROW_SIZE, COL_SIZE);
+    private final EnemyManager enemies = new EnemyManager(NUMBER_OF_ENEMIES);
+    private final Fill fill = new Fill();
+    public Player player = new Player(fill, enemies);
 
     public Game() {
         gameId = 0;
-        board = new GameBoard(ROW_SIZE, COL_SIZE);
-        enemies = new EnemyManager(NUMBER_OF_ENEMIES);
-
         fill.listenToGame(this);
         player.listenToGame(this);
         enemies.listenToGame(this);
@@ -98,9 +92,6 @@ public class Game {
         while (!events.isEmpty()) {
             GameEvent e = events.poll();
             for (GameObserver o : observers) {
-//                if (e.getEvent() != GameEvents.NO_NEW_EVENT) {
-//                    System.out.println(e.getEvent());
-//                }
                 GameEvent newEvent = o.update(e);
                 if (newEvent.getEvent() != GameEvents.NO_NEW_EVENT) {
                     events.add(newEvent);
@@ -123,10 +114,5 @@ public class Game {
         }
         return boardString.toString();
     }
-
-    public int getPlayerAttackStrength() {
-        return player.getAttackStrength();
-    }
-
 
 }

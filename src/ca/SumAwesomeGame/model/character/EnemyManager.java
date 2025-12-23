@@ -1,9 +1,6 @@
 package ca.SumAwesomeGame.model.character;
 
-import ca.SumAwesomeGame.model.game.CellPosition;
-import ca.SumAwesomeGame.model.game.Game;
-import ca.SumAwesomeGame.model.game.GameEvent;
-import ca.SumAwesomeGame.model.game.GameEvents;
+import ca.SumAwesomeGame.model.game.*;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 import ca.SumAwesomeGame.model.util.GameMath;
 
@@ -14,7 +11,6 @@ public class EnemyManager implements GameObserver {
     private final List<Enemy> listOfEnemies = new ArrayList<>();
     private final int numberOfEnemies;
     private int updateCount;
-
 
     public EnemyManager(int numberOfEnemies){
         this.numberOfEnemies = numberOfEnemies;
@@ -27,20 +23,19 @@ public class EnemyManager implements GameObserver {
             case VALID_MOVE -> {
                 updateCount++;
                 if (updateCount % GameMath.getRandomValueBetween(3, 5) == 0) {
-                    newEvent = getEnemyAttackEvent();
+                    newEvent = enemyAttacks();
                 }
             }
             case NEW_GAME -> createNewSetOfEnemies();
             case PLAYER_ATTACKED -> {
-                playerAttacksEnemy(event.getCell(), event.getValue());
-                newEvent = getEnemyAttackEvent();
+                newEvent = enemyAttacks();
             }
-            case INVALID_MOVE -> newEvent = getEnemyAttackEvent();
+            case INVALID_MOVE -> newEvent = enemyAttacks();
         }
         return newEvent;
     }
 
-    private GameEvent getEnemyAttackEvent() {
+    private GameEvent enemyAttacks() {
         Enemy randomEnemy = getRandomEnemy();
         return new GameEvent(GameEvents.ENEMY_ATTACKED,
                 -1,
@@ -54,11 +49,12 @@ public class EnemyManager implements GameObserver {
         return listOfEnemies.get(GameMath.getRandomValueBetween(0,2));
     }
 
-    private void playerAttacksEnemy(CellPosition lastUnlockedCellPosition, int attackValue) {
-        switch (lastUnlockedCellPosition){
-            case FIRST -> listOfEnemies.getFirst().reduceHealth(attackValue);
-            case SECOND -> listOfEnemies.get(1).reduceHealth(attackValue);
-            case THIRD -> listOfEnemies.get(2).reduceHealth(attackValue);
+    public void playerAttacksEnemy(Damage damage) {
+        int damageValue = damage.getDamage();
+        switch (damage.getEnemyCellPosition()){
+            case FIRST -> listOfEnemies.getFirst().reduceHealth(damageValue);
+            case SECOND -> listOfEnemies.get(1).reduceHealth(damageValue);
+            case THIRD -> listOfEnemies.get(2).reduceHealth(damageValue);
         }
     }
 

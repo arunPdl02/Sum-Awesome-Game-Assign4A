@@ -1,6 +1,9 @@
 package ca.SumAwesomeGame.model.character;
 
 import ca.SumAwesomeGame.model.game.*;
+import ca.SumAwesomeGame.model.game.Attack.Damage;
+import ca.SumAwesomeGame.model.game.Event.GameEvent;
+import ca.SumAwesomeGame.model.game.Event.GameEvents;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 import ca.SumAwesomeGame.model.util.GameMath;
 

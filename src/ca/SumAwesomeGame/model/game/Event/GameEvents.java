@@ -1,4 +1,4 @@
-package ca.SumAwesomeGame.model.game;
+package ca.SumAwesomeGame.model.game.Event;
 
 public enum GameEvents {
     NEW_GAME,

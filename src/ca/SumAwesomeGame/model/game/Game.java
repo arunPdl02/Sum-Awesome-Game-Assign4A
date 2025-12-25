@@ -2,6 +2,8 @@ package ca.SumAwesomeGame.model.game;
 
 import ca.SumAwesomeGame.model.character.EnemyManager;
 import ca.SumAwesomeGame.model.character.Player;
+import ca.SumAwesomeGame.model.game.Event.GameEvent;
+import ca.SumAwesomeGame.model.game.Event.GameEvents;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 
 import java.util.*;

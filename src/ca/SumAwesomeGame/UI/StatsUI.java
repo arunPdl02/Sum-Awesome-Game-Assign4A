@@ -2,8 +2,8 @@ package ca.SumAwesomeGame.UI;
 
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
 import ca.SumAwesomeGame.model.game.Game;
-import ca.SumAwesomeGame.model.game.GameEvent;
-import ca.SumAwesomeGame.model.game.GameEvents;
+import ca.SumAwesomeGame.model.game.Event.GameEvent;
+import ca.SumAwesomeGame.model.game.Event.GameEvents;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 
 import java.util.ArrayList;

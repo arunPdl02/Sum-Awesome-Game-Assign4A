@@ -1,8 +1,10 @@
-package ca.SumAwesomeGame.model.game;
+package ca.SumAwesomeGame.model.game.Attack;
 
 import ca.SumAwesomeGame.model.character.EnemyManager;
 import ca.SumAwesomeGame.model.equipment.rings.Ring;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
+import ca.SumAwesomeGame.model.game.CellPosition;
+import ca.SumAwesomeGame.model.game.Fill;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +35,19 @@ public class Attack {
     }
 
     private void calculatePlayerAttackStrength(Fill fill, List<Ring> rings, CellPosition attackPosition) {
-        //TODO add ring bonus here and then decide the final attackStrength add event about ring bonuses
         double damageMultiplier = 0;
         for(Ring r: rings){
-            damageMultiplier += r.getBonus();
+            if (r.canActivate(fill)) {
+                //TODO add event about ring bonuses
+                damageMultiplier += r.getBonus();
+            }
         }
         int fillStrength = fill.getFillStrength();
 
-        int playerAttackStrength = (int) (fillStrength + damageMultiplier*fillStrength);
-        damages.add(new Damage(playerAttackStrength, attackPosition, "Player"));
+        int playerAttackStrength = (int) Math.ceil(
+                fillStrength + damageMultiplier * fillStrength
+        );
+        damages.add(new Damage(playerAttackStrength, attackPosition, Attacker.PLAYER));
     }
 
     private void calculateWeaponAttackStrength(Fill fill, Weapon weapon, CellPosition lastUnlockedPosition) {

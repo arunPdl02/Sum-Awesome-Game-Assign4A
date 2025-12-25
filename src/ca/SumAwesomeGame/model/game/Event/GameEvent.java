@@ -1,4 +1,6 @@
-package ca.SumAwesomeGame.model.game;
+package ca.SumAwesomeGame.model.game.Event;
+
+import ca.SumAwesomeGame.model.game.CellPosition;
 
 public class GameEvent {
     private final GameEvents event;

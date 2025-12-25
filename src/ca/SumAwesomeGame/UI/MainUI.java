@@ -3,8 +3,8 @@ package ca.SumAwesomeGame.UI;
 import ca.SumAwesomeGame.UI.commands.Cheat;
 import ca.SumAwesomeGame.model.game.Game;
 import ca.SumAwesomeGame.model.game.GameBoard;
-import ca.SumAwesomeGame.model.game.GameEvent;
-import ca.SumAwesomeGame.model.game.GameEvents;
+import ca.SumAwesomeGame.model.game.Event.GameEvent;
+import ca.SumAwesomeGame.model.game.Event.GameEvents;
 import ca.SumAwesomeGame.model.observer.GameObserver;
 
 import java.util.List;

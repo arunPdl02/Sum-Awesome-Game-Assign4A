@@ -1,18 +1,29 @@
 package ca.SumAwesomeGame.model.character;
 
+import ca.SumAwesomeGame.model.equipment.rings.Ring;
+import ca.SumAwesomeGame.model.equipment.rings.RingsManager;
 import ca.SumAwesomeGame.model.equipment.weapons.NoWeapon;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
+import ca.SumAwesomeGame.model.equipment.weapons.WeaponEnum;
 import ca.SumAwesomeGame.model.equipment.weapons.WeaponsManager;
 import ca.SumAwesomeGame.model.game.*;
+import ca.SumAwesomeGame.model.game.Attack.Attack;
+import ca.SumAwesomeGame.model.game.Event.GameEvent;
+import ca.SumAwesomeGame.model.game.Event.GameEvents;
 import ca.SumAwesomeGame.model.observer.GameObserver;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Player implements GameObserver {
     private final WeaponsManager weapons = new WeaponsManager();
+    private final RingsManager rings = new RingsManager();
     private final Fill fill;
 
-    private Weapon currentWeapon = new NoWeapon();
 
+    private Weapon equippedWeapon = new NoWeapon();
+    private final List<Ring> equippedRings = new ArrayList<>();
     private int health = 1000;
     private final Attack attack;
 
@@ -25,13 +36,17 @@ public class Player implements GameObserver {
         attack.reset();
     }
 
+    public void equipWeapon(WeaponEnum name) {
+        this.equippedWeapon = weapons.getWeaponByName(name);
+    }
+
     public int getHealth() {
         return health;
     }
 
     private void attack(CellPosition attackPosition) {
         //TODO rings logic
-        attack.initiateAttack(fill, currentWeapon, attackPosition);
+        attack.initiateAttack(fill, equippedWeapon, equippedRings, attackPosition);
     }
 
     public void reduceHealth(int EnemyAttackStrength) {
@@ -63,7 +78,7 @@ public class Player implements GameObserver {
                     newEvent = new GameEvent(GameEvents.PLAYER_DIED);
                 }
             }
-            case GAME_WON -> currentWeapon = weapons.getRandomWeapon();
+            case GAME_WON -> equippedWeapon = weapons.getRandomWeapon();
         }
         return newEvent;
     }

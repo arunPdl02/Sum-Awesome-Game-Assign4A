@@ -1,12 +1,17 @@
 package ca.SumAwesomeGame.model.equipment.weapons;
 
 import ca.SumAwesomeGame.model.game.CellPosition;
-import ca.SumAwesomeGame.model.game.Damage;
+import ca.SumAwesomeGame.model.game.Attack.Damage;
 import ca.SumAwesomeGame.model.game.Fill;
 
 import java.util.List;
 
 public class NoWeapon extends Weapon{
+    @Override
+    public WeaponEnum getName() {
+        return WeaponEnum.NO_WEAPON;
+    }
+
     @Override
     public boolean canFire(Fill fill) {
         return false;

@@ -24,4 +24,11 @@ public class WeaponsManager {
                 GameMath.getRandomValueBetween(0, NUMBER_OF_WEAPONS)
         );
     }
+
+    public Weapon getWeaponByName(WeaponEnum name){
+        return listOfWeapons.stream()
+                .filter(w -> w.getName() == name)
+                .findFirst()
+                .orElse(new NoWeapon());
+    }
 }

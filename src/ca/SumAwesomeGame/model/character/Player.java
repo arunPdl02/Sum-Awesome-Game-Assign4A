@@ -1,6 +1,7 @@
 package ca.SumAwesomeGame.model.character;
 
 import ca.SumAwesomeGame.model.equipment.rings.Ring;
+import ca.SumAwesomeGame.model.equipment.rings.RingsEnum;
 import ca.SumAwesomeGame.model.equipment.rings.RingsManager;
 import ca.SumAwesomeGame.model.equipment.weapons.NoWeapon;
 import ca.SumAwesomeGame.model.equipment.weapons.Weapon;
@@ -38,6 +39,10 @@ public class Player implements GameObserver {
 
     public void equipWeapon(WeaponEnum name) {
         this.equippedWeapon = weapons.getWeaponByName(name);
+    }
+
+    public void equipRing(RingsEnum name) {
+        this.equippedRings.add(rings.getRingByName(name));
     }
 
     public int getHealth() {
@@ -78,7 +83,10 @@ public class Player implements GameObserver {
                     newEvent = new GameEvent(GameEvents.PLAYER_DIED);
                 }
             }
-            case GAME_WON -> equippedWeapon = weapons.getRandomWeapon();
+            case GAME_WON -> {
+                //TODO randomly gets a weapon or ring as reward
+                equippedWeapon = weapons.getRandomWeapon();
+            }
         }
         return newEvent;
     }

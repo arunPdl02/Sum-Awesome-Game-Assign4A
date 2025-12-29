@@ -2,11 +2,10 @@ package ca.SumAwesomeGame.model.equipment.rings;
 
 import ca.SumAwesomeGame.model.game.Fill;
 
-public class THE_BIG_ONE extends Ring{
-
+public class NoRing extends Ring {
     @Override
     public RingsEnum getName() {
-        return RingsEnum.THE_BIG_ONE;
+        return RingsEnum.NO_RING;
     }
 
     @Override
@@ -16,6 +15,6 @@ public class THE_BIG_ONE extends Ring{
 
     @Override
     public double getBonus() {
-        return 0.5;//50% damage
+        return 0;
     }
 }
